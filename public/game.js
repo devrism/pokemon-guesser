@@ -1,4 +1,5 @@
 //this is the client file
+
 const socket = io();
 let firstPlayer=false;
 let roomID;
@@ -91,3 +92,20 @@ const updateDOM=(player)=>{
     const winnerName=$("."+player+" .name").html().trim();
     $("#message").html(winnerName+" scored a point!");
 }
+
+var drawMode = $('drawMode');
+const canvas = new fabric.Canvas("canvas");
+canvas.isDrawingMode = true;
+
+var brush = canvas.freeDrawingBrush;
+brush.color = '#000000';
+brush.width = 5;
+
+$(".eraseMode").click(function() {
+    canvas.freeDrawingBrush.color = '#FFFFFF';
+});
+
+$(".drawMode").click(function() {
+    //canvas.freeDrawingBrush = new fabric.PencilBrush("canvas");
+    canvas.freeDrawingBrush.color = '#000000';
+});
