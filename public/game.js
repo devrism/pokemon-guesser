@@ -1,4 +1,4 @@
-//const socket = io.connect("http://localhost:4000");
+//this is the client file
 const socket = io();
 let firstPlayer=false;
 let roomID;
