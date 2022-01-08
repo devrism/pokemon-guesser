@@ -5,34 +5,37 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
-    <title>RPS App</title>
+    <title>Who's That Pokemon?</title>
 </head>
 <body onbeforeunload="disconnect()">
 
     <div class="container">
         <div class="window">
             <div class="header">
-                <h1>Welcome To Rock Paper Scissor Online</h1>
+                <h1>Who's That Pokemon?</h1>
+                <h2>A Pokemon guessing and drawing game</h2>
+                <h3>From Dev to Junkland</h3>
             </div>
             <div class="body">
                 <div class="newRoom">
-                    <h4>Create a New Game</h4>
+                    <h4>Start New Game</h4>
                     <form onsubmit="return false">                        
-                        <input name="p1name" type="text" placeholder="your name here">
+                        <input name="p1name" type="text" placeholder="Nickname">
                         <button class="createBtn btn btn-primary">Create</button>
                     </form>
                 </div>
                 
                 <div class="joinRoom">
-                    <h4>Join an existing Game</h4>
+                    <h4>Join Existing Game</h4>
                     <form onsubmit="return false">                        
-                        <input name="p2name" type="text" placeholder="your name here">
-                        <input name="roomID" type="text" placeholder="room ID here">
+                        <input name="p2name" type="text" placeholder="Nickname">
+                        <input name="roomID" type="text" placeholder="Room code">
                         <button class="joinBtn btn btn-primary">Join</button>
                     </form>
                 </div>
 
                 <div class="leaderboard">
+                    <h3>Player List:</h3>
                     <div class="player1">
                         <h4 class="name">
                             Player1 :                             
@@ -47,6 +50,37 @@
                         <span>0</span>
                     </div>
                 </div>
+
+                <div class="hostcontrols">
+                    <form onsubmit="return false">       
+                        (Host Only) Choose a Pokemon to describe<br>                 
+                        <input name="choosepokemon" type="text" placeholder="Name of Pokemon">
+                        <button class="createBtn btn btn-primary">Submit</button>
+                    </form>
+
+                    <form onsubmit="return false">
+                        (Host Only) Describe your Pokemon<br>                    
+                        <input name="describepokemon" type="text" placeholder="Description">
+                        <button class="createBtn btn btn-primary">Submit</button>
+                    </form>
+
+                    <button class="btn btn-primary">
+                        (Host Only) Reveal Pokemon
+                    </button>
+                </div>
+
+                <div class="playercontrols">
+                    <h3>(Player Only) Click the Done button when you're done drawing!</h3>
+                    <button class="btn btn-primary">
+                        Done
+                    </button>
+                    <form onsubmit="return false">
+                        (Player Only) Who's That Pokemon?<br>                    
+                        <input name="describepokemon" type="text" placeholder="Name of Pokemon">
+                        <button class="createBtn btn btn-primary">Submit Guess</button>
+                    </form>
+                </div><br>
+
                 <div class="controls">
                     <button class="btn btn-primary">
                         Rock
@@ -58,10 +92,16 @@
                         Scissor
                     </button>
                 </div>
+
                 <div id="message">
-                    Waiting for other player's choice...
+                    Waiting for other host to choose Pokemon...
                 </div>
                 <br>  
+
+                <div id="history">
+                    <h3>Previous Descriptions:</h3>
+                    Waiting for host to describe Pokemon...
+                </div>
             </div>
         </div>
     </div>

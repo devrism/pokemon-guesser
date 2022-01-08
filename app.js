@@ -1,3 +1,4 @@
+//this is the server code
 const app = require('express');
 const socket = require('socket.io');
 const randomstring = require('randomstring');

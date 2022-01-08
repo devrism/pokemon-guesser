@@ -28,6 +28,11 @@ html,body{
     margin: auto 4vw;
 }
 
-.leaderboard,.controls,#message{
+  .leaderboard
+, .controls
+, .hostcontrols
+, .playercontrols
+, #history
+, #message{
     display: none;
 }
