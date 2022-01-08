@@ -34,6 +34,8 @@ io.on("connection", (socket) => {
         socket.join(roomID);
         players[roomID] = data.name;
         socket.emit("newGame", { roomID: roomID });
+
+        console.log(data.name + " created a game")
     })
 
     //Join Game Listener
@@ -41,6 +43,8 @@ io.on("connection", (socket) => {
         socket.join(data.roomID);
         socket.to(data.roomID).emit("player2Joined", { p2name: data.name, p1name: players[data.roomID] });
         socket.emit("player1Joined", { p2name: players[data.roomID], p1name: data.name });
+
+        console.log(data.name + " joined a game with " + players[data.roomID])
     })
 
     //Listener to Player 1's Choice
@@ -48,18 +52,22 @@ io.on("connection", (socket) => {
     */
     socket.on("choice1", (data) => {
         choice1 = data.choice;
-        console.log(choice1, choice2);
         if (choice2 != "") {
+            console.log(data.name + " used " + choice1 + " against " + choice2);
             result(data.roomID);
+        } else {
+            console.log(data.name + " used " + choice1);
         }
     });
 
     //Listener to Player 2's Choice
     socket.on("choice2", (data) => {
         choice2 = data.choice;
-        console.log(choice1, choice2);
         if (choice1 != "") {
+            console.log(data.name + " used " + choice2 + " against " + choice1);
             result(data.roomID);
+        } else {
+            console.log(data.name + " used " + choice2);
         }
     });
 

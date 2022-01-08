@@ -2,6 +2,7 @@
 const socket = io();
 let firstPlayer=false;
 let roomID;
+let playerName;
 
 /*Create Game Event Emitter
 Once this event is triggered, the client grabs player1’s name and emits a socket event named createGame. 
@@ -9,8 +10,9 @@ The variable firstPlayer identifies the player who started the game.
 This is used to identify the host */
 $(".createBtn").click(function(){
     firstPlayer=true;
-    const playerName=$("input[name=p1name").val();
+    playerName=$("input[name=p1name").val();
     socket.emit('createGame',{name:playerName});
+    
 })
 
 //New Game Created Listener
@@ -23,7 +25,7 @@ socket.on("newGame",(data)=>{
 
 //Join Game Event Emitter
 $(".joinBtn").click(function(){
-    const playerName=$("input[name=p2name").val();
+    playerName=$("input[name=p2name").val();
     roomID=$("input[name=roomID").val();
     socket.emit('joinGame',{
         name:playerName,
@@ -63,7 +65,8 @@ $(".controls button").click(function (){
     const choiceEvent=firstPlayer?"choice1":"choice2";
     socket.emit(choiceEvent,{
         choice: choice,
-        roomID:roomID
+        roomID:roomID,
+        name:playerName,
     });
 })
 
