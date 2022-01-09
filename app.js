@@ -17,7 +17,8 @@ const io = socket(server);
 let players = {};
 //GAME VARIABLES
 let choice1 = "", choice2 = "";
-
+let chosenPokemon = "";
+let description = "";
 
 /*All event listeners/emitters go inside the io.on block as shown below. 
 connection is the default event listener provided by Socket.io 
@@ -37,6 +38,21 @@ io.on("connection", (socket) => {
         socket.emit("newGame", { roomID: roomID });
 
         console.log(data.name + " created a game")
+    })
+
+    socket.on("choosepokemon", (data) => {
+        chosenPokemon = data.chosenPokemon;
+        console.log(data.name + " chose the Pokemon: " + chosenPokemon);
+    })
+
+    socket.on("addDescription", (data) => {
+        description = data.pokemonDescription;
+        console.log(data.name + " writes: " + description);
+
+        io.sockets.to(data.id).emit("updateDescription", { 
+            pokemonDescription: description,
+            name: data.name
+        }); 
     })
 
     //Join Game Listener

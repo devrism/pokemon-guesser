@@ -4,6 +4,8 @@ const socket = io();
 let firstPlayer=false;
 let roomID;
 let playerName;
+let hostChoice;
+let description;
 
 /*Create Game Event Emitter
 Once this event is triggered, the client grabs player1’s name and emits a socket event named createGame. 
@@ -76,6 +78,26 @@ $(".controls button").click(function (){
     });
 })
 
+//Host chooses pokemon to describe
+$(".choosePokemonButton").click(function (){
+    hostChoice=$("input[name=choosepokemon]").val();
+    socket.emit('choosepokemon', {
+        chosenPokemon:hostChoice,
+        name:playerName
+    });
+})
+//Emitter for describing a pokemon from the host
+$(".describeButton").click(function (){
+    description=$("input[name=describepokemon]").val();
+    socket.emit('addDescription', {
+        chosenPokemon:hostChoice,
+        pokemonDescription:description,
+        name:playerName,
+        id:roomID
+    });
+    $("#history").html(description).show();
+})
+
 //Result Event Listener
 socket.on("result",(data)=>{
     if(data.winner=="draw"){
@@ -83,6 +105,11 @@ socket.on("result",(data)=>{
     }else{
         updateDOM(firstPlayer==data.winner?"player1":"player2");
     }
+})
+
+// Update description event listener
+socket.on("updateDescription",(data)=>{
+    $("#history").html("Host writes: " + data.pokemonDescription);
 })
 
 const updateDOM=(player)=>{
