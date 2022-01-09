@@ -1,23 +1,21 @@
 html{
-    background-image: url("ditto.png");
+    /*background-image: url("ditto.png");*/
     background-repeat: repeat;
 }
 
 body{
     text-align: center;
+    /*background-image: url("background.png");
+    background-repeat: no-repeat;
     background-color: transparent;
+    background-position: center; */
 }
-body::before{
-    content: "";
-    background-color: white;
-    position: fixed;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-    opacity: 0.85;
-    margin: 0vh 10vw;
-}
+
+/*  .newRoom
+, #message {
+    position: relative;
+    padding-top:20vh;
+}*/
 
 .container{
     position: relative;
