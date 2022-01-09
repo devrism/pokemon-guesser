@@ -20,14 +20,9 @@ body::before{
 }
 
 .container{
-    margin: auto;
     position: relative;
-}
-
-.window{
-    border: 4px dashed #32a89d;
-    border-radius: 10px;
-    margin: 10vh 10vw;
+    width: 100%;
+    height: 70vh;
 }
 
 .header{
