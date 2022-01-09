@@ -1,10 +1,9 @@
-# Welcome to Rock Paper Scissor Online
+# Who's That Pokemon!
 
-This Repo contains the starter code with all the necessary setup and UI elements. 
+A janky, handmade game by Dev.
 
-### Step to Setup on your local
+### TODO: How to Play steps
 
-1. Clone this repo.
-2. Inside the directory, run ```npm install``` to install all the dependecies.
-3. Then ```npm start``` to Start the App.
-4. Go to [localhost:4000](http://localhost:4000) to view the app.
+1. 
+2.
+3.
