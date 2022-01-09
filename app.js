@@ -12,9 +12,11 @@ const server = express.listen(process.env.PORT || 4000, () => {
 express.use(app.static('public'));
 
 const io = socket(server);
-
+const MAX_ROOMS = 5;
+const MAX_PLAYERS = 2;
 //ALL player info
-let players = {};
+let roomList = [];
+let host; //TODO
 //GAME VARIABLES
 let choice1 = "", choice2 = "";
 let chosenPokemon = "";
@@ -34,7 +36,7 @@ io.on("connection", (socket) => {
     socket.on("createGame", (data) => {
         const roomID = randomstring.generate({ length: 4 });
         socket.join(roomID);
-        players[roomID] = data.name;
+        roomList[roomID] = [{ name: data.name }];
         socket.emit("newGame", { roomID: roomID });
 
         console.log(data.name + " created a game")
@@ -57,11 +59,21 @@ io.on("connection", (socket) => {
 
     //Join Game Listener
     socket.on("joinGame", (data) => {
-        socket.join(data.roomID);
-        socket.to(data.roomID).emit("player2Joined", { p2name: data.name, p1name: players[data.roomID] });
-        socket.emit("player1Joined", { p2name: players[data.roomID], p1name: data.name });
-
-        console.log(data.name + " joined a game with " + players[data.roomID])
+        if(Object.keys(roomList).length < MAX_ROOMS && roomList[data.roomID].length < MAX_PLAYERS) {
+            const playerCount = roomList[data.roomID].push({ name: data.name });
+            socket.join(data.roomID);
+            socket.to(data.roomID).emit("player2Joined", { p2name: data.name, p1name: roomList[data.roomID] });
+            socket.emit("player1Joined", { p2name: roomList[data.roomID], p1name: data.name });
+    
+            console.log(data.name + " joined a game with " + roomList[data.roomID])
+            console.log(playerCount);
+            console.log(roomList);
+            console.log(roomList[data.roomID]);
+        } else {
+            console.log(JSON.stringify(roomList) + " /// " + Object.keys(roomList).length + " //// " + Object.keys(roomList));
+            var errorMessage = "There are no more rooms available right now; try again later!";
+            socket.emit("failedToJoinGame", { message: errorMessage });
+        } 
     })
 
     //Listener to Player 1's Choice

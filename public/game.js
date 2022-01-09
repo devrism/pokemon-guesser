@@ -1,11 +1,12 @@
 //this is the client file
 
 const socket = io();
-let firstPlayer=false;
+let firstPlayer = false;
 let roomID;
 let playerName;
 let hostChoice;
 let description;
+let drawnImage;
 
 /*Create Game Event Emitter
 Once this event is triggered, the client grabs player1’s name and emits a socket event named createGame. 
@@ -36,10 +37,14 @@ $(".joinBtn").click(function(){
     });
 })
 
+socket.on("failedToJoinGame", (data)=>{
+    $("#message").html(data.message).show();
+})
+
 //Player 2 Joined
 socket.on("player2Joined",(data)=>{
     transition(data);
-  })
+})
 
 //Player 1 Joined
 socket.on("player1Joined",(data)=>{
@@ -139,10 +144,10 @@ $(".drawMode").click(function() {
 });
 
 $(".finishdrawing").click(function() {
-    var theDataURL = canvas.toDataURL();
+    drawnImage = canvas.toDataURL();
     socket.emit('finishDrawing',{ //todo make server listener
         name:playerName,
         roomID:roomID,
-        drawing:theDataURL
+        drawing:drawnImage
     });
 });
