@@ -13,14 +13,14 @@ express.use(app.static('public'));
 
 const io = socket(server);
 const MAX_ROOMS = 5;
-const MAX_PLAYERS = 2;
+const MAX_PLAYERS = 3;
 //ALL player info
-let roomList = [];
-let host; //TODO
+var roomList = [];
+var drawnImageList = {}; //the superior pattern over the way roomList is implemented
 //GAME VARIABLES
 let choice1 = "", choice2 = "";
-let chosenPokemon = "";
-let description = "";
+var chosenPokemon = "";
+var description = "";
 
 /*All event listeners/emitters go inside the io.on block as shown below. 
 connection is the default event listener provided by Socket.io 
@@ -37,6 +37,7 @@ io.on("connection", (socket) => {
         const roomID = randomstring.generate({ length: 4 });
         socket.join(roomID);
         roomList[roomID] = [{ name: data.name }];
+        drawnImageList[roomID] = {};
         socket.emit("newGame", { roomID: roomID });
 
         console.log(data.name + " created a game")
@@ -66,14 +67,28 @@ io.on("connection", (socket) => {
             socket.emit("player1Joined", { p2name: roomList[data.roomID], p1name: data.name });
     
             console.log(data.name + " joined a game with " + roomList[data.roomID])
-            console.log(playerCount);
+            console.log("Player count: " + playerCount);
             console.log(roomList);
-            console.log(roomList[data.roomID]);
         } else {
             console.log(JSON.stringify(roomList) + " /// " + Object.keys(roomList).length + " //// " + Object.keys(roomList));
-            var errorMessage = "There are no more rooms available right now; try again later!";
+            var errorMessage = "Error: room unavailable";
             socket.emit("failedToJoinGame", { message: errorMessage });
         } 
+    })
+
+    socket.on("finishDrawing", (data) => {
+        //put all drawings into list to display later
+        console.log("image list: " + JSON.stringify(drawnImageList));
+        drawnImageList[data.id][data.name] = data.drawing;
+        console.log(JSON.stringify(drawnImageList[data.roomID]));
+
+        //TODO check if all players have finished drawing. if so, show all drawings
+        // if (number of items in drawnImageList[data.roomID] == items in roomList[data.roomID].length - 1) {
+            io.sockets.to(data.id).emit("endOfGame", { 
+                message: "All players are done drawing!",
+                imageList: drawnImageList[data.roomID]
+            });
+        //}
     })
 
     //Listener to Player 1's Choice

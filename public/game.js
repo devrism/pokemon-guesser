@@ -125,6 +125,8 @@ const updateDOM=(player)=>{
     $("#message").html(winnerName+" scored a point!");
 }
 
+//////// drawing canvas functions
+
 var drawMode = $('drawMode');
 const canvas = new fabric.Canvas("canvas");
 canvas.isDrawingMode = true;
@@ -144,10 +146,35 @@ $(".drawMode").click(function() {
 });
 
 $(".finishdrawing").click(function() {
-    drawnImage = canvas.toDataURL();
+    //save canvas as image
+    let drawnImageData = canvas.toDataURL('png');
+    var img = document.createElement("img");
+    img.src = drawnImageData;
+
+    //display image in html
+    var block = document.getElementById("message");
+    block.appendChild(img);
+
     socket.emit('finishDrawing',{ //todo make server listener
         name:playerName,
-        roomID:roomID,
-        drawing:drawnImage
+        id:roomID,
+        drawing:drawnImageData
     });
+    //hide canvas after submitting drawing
+    $("#canvas").css({'border': 'none'});
+    $("#canvas").hide();
 });
+
+socket.on("endOfGame", (data) => {
+    let imageList = data.imageList;
+    let artistName;
+    for (let [key, value] of Object.entries(imageList)) {
+        let img = document.createElement("img");
+        img.src = value;
+        artistName = key;
+        //display image in html
+        var block = document.getElementById("message");
+        block.appendChild(artistName);
+        block.appendChild(img);
+    }
+})
