@@ -1,19 +1,37 @@
-html,body{
+html{
+    background-image: url("ditto.png");
+    background-repeat: repeat;
+}
+
+body{
     text-align: center;
+    background-color: transparent;
+}
+body::before{
+    content: "";
+    background-color: white;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    opacity: 0.85;
+    margin: 0vh 10vw;
 }
 
 .container{
-    margin:auto;
+    margin: auto;
+    position: relative;
 }
 
 .window{
-    border: 5px solid #979292;
+    border: 4px dashed #32a89d;
     border-radius: 10px;
-    margin: 5vh 10vw;
+    margin: 10vh 10vw;
 }
 
 .header{
-    border-bottom: 2px solid black;
+    border-bottom: 2px #32a89d;
 }
 
 .newRoom,.joinRoom{

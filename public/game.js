@@ -96,16 +96,26 @@ const updateDOM=(player)=>{
 var drawMode = $('drawMode');
 const canvas = new fabric.Canvas("canvas");
 canvas.isDrawingMode = true;
-
-var brush = canvas.freeDrawingBrush;
-brush.color = '#000000';
-brush.width = 5;
+canvas.set('erasable', true);
+canvas.freeDrawingBrush.color = '#000000';
+canvas.freeDrawingBrush.width = 5;
 
 $(".eraseMode").click(function() {
-    canvas.freeDrawingBrush.color = '#FFFFFF';
+    canvas.freeDrawingBrush = new fabric.EraserBrush(canvas);
+    canvas.freeDrawingBrush.width = 5;
 });
 
 $(".drawMode").click(function() {
-    //canvas.freeDrawingBrush = new fabric.PencilBrush("canvas");
+    canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+    canvas.freeDrawingBrush.width = 5;
     canvas.freeDrawingBrush.color = '#000000';
+});
+
+$(".finishdrawing").click(function() {
+    var theDataURL = canvas.toDataURL();
+    socket.emit('finishDrawing',{ //todo make server listener
+        name:playerName,
+        roomID:roomID,
+        drawing:theDataURL
+    });
 });
