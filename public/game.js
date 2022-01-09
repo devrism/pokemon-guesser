@@ -112,11 +112,6 @@ socket.on("result",(data)=>{
     }
 })
 
-// Update description event listener
-socket.on("updateDescription",(data)=>{
-    $("#history").html("Host writes: " + data.pokemonDescription);
-})
-
 const updateDOM=(player)=>{
     const playerDOM=$("."+player+" span");
     const prevScore=parseInt(playerDOM.html().trim());
@@ -147,7 +142,7 @@ $(".drawMode").click(function() {
 
 $(".finishdrawing").click(function() {
     //save canvas as image
-    let drawnImageData = canvas.toDataURL('png');
+    let drawnImageData = canvas.toDataURL('jpg');
     var img = document.createElement("img");
     img.src = drawnImageData;
 
@@ -165,16 +160,26 @@ $(".finishdrawing").click(function() {
     $("#canvas").hide();
 });
 
-socket.on("endOfGame", (data) => {
-    let imageList = data.imageList;
-    let artistName;
-    for (let [key, value] of Object.entries(imageList)) {
-        let img = document.createElement("img");
-        img.src = value;
-        artistName = key;
-        //display image in html
-        var block = document.getElementById("message");
-        block.appendChild(artistName);
-        block.appendChild(img);
-    }
+// Update description event listener
+socket.on("updateDescription",(data)=>{
+    $("#history").html("Host writes: " + data.pokemonDescription);
 })
+
+socket.on("endOfGame", (data) => {
+    let drawnImageData = data.image;
+    logToServer(data.image, "client image list: ");
+
+    var img = document.createElement("img");
+    img.src = drawnImageData;
+
+    //display image in html
+    var block = document.getElementById("message");
+    block.appendChild(img);
+})
+
+function logToServer(value, msg) {
+    socket.emit('logToServer',{
+        key: value,
+        message: msg
+    });
+}

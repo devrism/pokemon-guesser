@@ -48,16 +48,6 @@ io.on("connection", (socket) => {
         console.log(data.name + " chose the Pokemon: " + chosenPokemon);
     })
 
-    socket.on("addDescription", (data) => {
-        description = data.pokemonDescription;
-        console.log(data.name + " writes: " + description);
-
-        io.sockets.to(data.id).emit("updateDescription", { 
-            pokemonDescription: description,
-            name: data.name
-        }); 
-    })
-
     //Join Game Listener
     socket.on("joinGame", (data) => {
         if(Object.keys(roomList).length < MAX_ROOMS && roomList[data.roomID].length < MAX_PLAYERS) {
@@ -76,17 +66,27 @@ io.on("connection", (socket) => {
         } 
     })
 
+    socket.on("addDescription", (data) => {
+        description = data.pokemonDescription;
+        console.log(data.name + " writes: " + description);
+
+        io.sockets.to(data.id).emit("updateDescription", { 
+            pokemonDescription: description,
+            name: data.name
+        }); 
+    })
+
     socket.on("finishDrawing", (data) => {
         //put all drawings into list to display later
-        console.log("image list: " + JSON.stringify(drawnImageList));
         drawnImageList[data.id][data.name] = data.drawing;
-        console.log(JSON.stringify(drawnImageList[data.roomID]));
-
+        console.log("image list: " + JSON.stringify(drawnImageList));
+        console.dir(drawnImageList[data.id]);
+        console.log('////////////////////////');
+        console.dir(JSON.stringify(drawnImageList[data.id][data.name]));
         //TODO check if all players have finished drawing. if so, show all drawings
         // if (number of items in drawnImageList[data.roomID] == items in roomList[data.roomID].length - 1) {
             io.sockets.to(data.id).emit("endOfGame", { 
-                message: "All players are done drawing!",
-                imageList: drawnImageList[data.roomID]
+                image: drawnImageList[data.id][data.name]
             });
         //}
     })
@@ -124,6 +124,11 @@ io.on("connection", (socket) => {
         choice1 = "";
         choice2 = "";
     }
+
+    socket.on("logToServer", (data) => {
+        console.log("Message from client (DEBUG): " + data.key);
+        console.log(data.value);
+    });
 
 })
 
