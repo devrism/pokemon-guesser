@@ -58,6 +58,10 @@ body{
 #drawMode:hover {
     background-image: url('res/pen-active.png');
 }
+#canvas {
+    border:2px solid black;
+    float:left;
+}
 
 button {
 	border: none;

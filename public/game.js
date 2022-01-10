@@ -105,6 +105,7 @@ $("#guessButton").click(function () {
         roomID: roomID
     });
     document.getElementById("guessButton").textContent = "Awaiting results...";
+    document.getElementById("guessButton").disabled = true;
     document.getElementById("guessPokemon").disabled = true;
 })
 
@@ -140,7 +141,10 @@ $(".finishdrawing").click(function () {
         drawing: drawnImageData
     });
     //hide canvas after submitting drawing
+    canvas.isDrawingMode = false;
     $("#canvas").hide();
+    document.getElementById("finishdrawing").textContent = "Submitted!";
+    document.getElementById("finishdrawing").disabled = true;
 });
 
 ///////////// end of game reveal controls/////////////////////////////////////////////
