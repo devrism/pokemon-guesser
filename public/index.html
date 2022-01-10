@@ -29,37 +29,27 @@
                 </form>
             </div>
 
-            <div class="leaderboard">
+            <div class="players">
                 <h3>Player List:</h3>
-                <div class="player1">
-                    <h4 class="name">
-                        Player1 :                             
-                    </h4>
-                </div>
-                <div class="player2">
-                    <h4 class="name">
-                        Player2:                             
-                    </h4>
-                </div>
+                <ul id="playerList"></ul>
             </div>
 
             <div class="hostcontrols">
                 You are the host!
                 <form onsubmit="return false">       
-                    Choose a Pokemon to describe<br>                 
-                    <input name="choosepokemon" type="text" placeholder="Name of Pokemon">
-                    <button class="choosePokemonButton btn btn-primary">Submit</button>
+                    Choose your Pokemon<br>                 
+                    <input name="choosePokemon" id="choosePokemon" type="text" placeholder="Name of Pokemon">
+                    <button class="choosePokemonButton btn btn-primary" id="choosePokemonButton">Submit</button>
                 </form>
 
-                <form onsubmit="return false">
+                <form id="describePokemonForm" onsubmit="return false">
                     Describe your Pokemon<br>                    
-                    <!--<input name="describepokemon" type="text" placeholder="Description">-->
                     <textarea id="describepokemon" rows="10" cols="70"></textarea>
                     <button class="describeButton btn btn-primary">Submit</button>
                 </form>
 
                 <button class="btn btn-primary">
-                    Reveal Pokemon
+                    Reveal Pokemon to all players
                 </button>
             </div>
 

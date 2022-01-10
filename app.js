@@ -45,7 +45,7 @@ io.on("connection", (socket) => {
         console.log(roomList[roomID]['players']);
     })
 
-    socket.on("choosepokemon", (data) => {
+    socket.on("choosePokemon", (data) => {
         let chosenPokemon = data.chosenPokemon;
         roomList[data.roomID]['pokemon'] = chosenPokemon;
         console.log(data.name + " chose the Pokemon: " + chosenPokemon);

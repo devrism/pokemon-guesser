@@ -31,7 +31,7 @@ body{
     margin: 4vh 1vw;
 }
 
-.controls,.leaderboard{
+.controls,.players{
     margin: 3vh 2vw;
 }
 
@@ -56,12 +56,13 @@ button {
 	cursor: pointer;
 	outline: inherit;
 }
-  .leaderboard
+  .players
 , .controls
 , .hostcontrols
 , .playercontrols
 , #history
 , #message
-, #record {
+, #record
+, #describePokemonForm {
     display: none;
 }
