@@ -30,14 +30,14 @@ body{
 .newRoom,.joinRoom{
     margin: 4vh 1vw;
 }
-
+/*
 .controls,.players{
     margin: 3vh 2vw;
 }
 
 .controls button{
     margin: auto 4vw;
-}
+}*/
 #eraseMode {
     background-image: url('res/eraser-inactive.png');
     background-color: transparent;

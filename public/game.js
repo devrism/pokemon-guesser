@@ -112,21 +112,35 @@ $("#guessButton").click(function () {
 
 //////// drawing canvas functions/////////////////////////////////////////////////
 
-const canvas = new fabric.Canvas("canvas");
+const canvas = window._canvas = new fabric.Canvas("canvas");
 canvas.isDrawingMode = true;
 canvas.set('erasable', true);
+var eraser = new fabric.EraserBrush(canvas);
+var pen = new fabric.PencilBrush(canvas);
+var brushWidth = 3;
 canvas.freeDrawingBrush.color = '#000000';
-canvas.freeDrawingBrush.width = 5;
+canvas.freeDrawingBrush.width = brushWidth;
 
 $("#eraseMode").click(function () {
-    canvas.freeDrawingBrush = new fabric.EraserBrush(canvas);
-    canvas.freeDrawingBrush.width = 5;
+    canvas.freeDrawingBrush = eraser;
+    canvas.freeDrawingBrush.width = brushWidth;
+});
+//TODO try Konva instead?
+$("#drawMode").click(function () {
+    canvas.freeDrawingBrush = pen;
+    canvas.freeDrawingBrush.width = brushWidth;
+    canvas.freeDrawingBrush.color = '#000000';
 });
 
-$("#drawMode").click(function () {
-    canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
-    canvas.freeDrawingBrush.width = 5;
-    canvas.freeDrawingBrush.color = '#000000';
+$("#brushSize").change(function (event) {
+    brushWidth = event.target.value;
+    canvas.freeDrawingBrush.width = brushWidth;
+    canvas.calcOffset();
+});
+$("#brushSize").input(function (event) {
+    brushWidth = event.target.value;
+    canvas.freeDrawingBrush.width = brushWidth;
+    canvas.calcOffset();
 });
 
 $(".finishdrawing").click(function () {

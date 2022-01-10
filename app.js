@@ -42,6 +42,7 @@ io.on("connection", (socket) => {
         console.log(roomList);
         console.log(roomList[roomID]);
         console.log(roomList[roomID]['players']);
+        //TODO do not create a game if at max room limit
     })
 
     socket.on("submitGuess", (data) => {
