@@ -129,7 +129,7 @@ canvas.set('erasable', true);
 canvas.freeDrawingBrush.color = '#000000';
 canvas.freeDrawingBrush.width = 5;
 
-$(".eraseMode").click(function() {
+$("#eraseMode").click(function() {
     canvas.freeDrawingBrush = new fabric.EraserBrush(canvas);
     canvas.freeDrawingBrush.width = 5;
 });
