@@ -9,7 +9,7 @@ let drawnImage;
 
 /*Create Game Event Emitter*/
 $(".createBtn").click(function () {
-    playerName = $("input[name=p1name").val();
+    playerName = $("input[name=hostName").val();
     socket.emit('createGame', { name: playerName });
 })
 
@@ -98,7 +98,7 @@ $(".describeButton").click(function () {
 })
 
 $("#guessButton").click(function () {
-    guess = $("textarea[id=guessPokemon]").val();
+    guess = $("input[name=guessPokemon]").val();
     socket.emit('submitGuess', {
         guess: guess,
         name: playerName,
@@ -147,6 +147,7 @@ $(".finishdrawing").click(function () {
 ///////////// end of game reveal controls/////////////////////////////////////////////
 
 socket.on("endOfGame", (data) => {
+    logToServer(data, "Data: ");
     let drawnImageData = data.image;
     var img = document.createElement("img");
     img.src = drawnImageData;
@@ -154,6 +155,9 @@ socket.on("endOfGame", (data) => {
     //display image in html
     var block = document.getElementById("finishedArt");
     block.appendChild(img);
+
+    let guesses = data.guesses;
+    logToServer(guesses, "Guesses: "); //TODO display guesses
 })
 
 function logToServer(value, msg) {

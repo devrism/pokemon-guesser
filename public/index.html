@@ -15,7 +15,7 @@
             <div class="newRoom">
                 <h4>Host New Game</h4>
                 <form onsubmit="return false">                        
-                    <input name="p1name" type="text" placeholder="Nickname">
+                    <input name="hostName" type="text" placeholder="Nickname">
                     <button class="createBtn btn btn-primary">Create</button>
                 </form>
             </div>
@@ -65,11 +65,13 @@
                 <button class="finishdrawing">
                     Done
                 </button>
+
                 <form id="guessPokemonForm" onsubmit="return false">
                     Who's That Pokemon?<br>                    
-                    <input id="guessPokemon" type="text" placeholder="Name of Pokemon">
+                    <input id="guessPokemon" name="guessPokemon" type="text" placeholder="Name of Pokemon">
                     <button id="guessButton">Submit Guess</button>
                 </form>
+
             </div><br>
 
             <div id="message">

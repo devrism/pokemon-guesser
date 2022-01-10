@@ -36,6 +36,7 @@ io.on("connection", (socket) => {
         socket.join(roomID);
         roomList[roomID] = {};
         roomList[roomID]['players'] = [data.name];
+        roomList[roomID]['guesses'] = [];
         drawnImageList[roomID] = {};
         socket.emit("newGame", { roomID: roomID });
 
@@ -43,6 +44,16 @@ io.on("connection", (socket) => {
         console.log(roomList);
         console.log(roomList[roomID]);
         console.log(roomList[roomID]['players']);
+    })
+
+    socket.on("submitGuess", (data) => {
+        let guess = data.guess;
+        let roomID = data.roomID;
+        roomList[roomID]['guesses'].push(data.name + " guessed: " + guess);
+        console.log(roomList[roomID]['guesses']);
+        //TODO if all guesses are submitted, then end game by emitting endOfGame
+
+        endOfGame(roomID);
     })
 
     socket.on("choosePokemon", (data) => {
@@ -85,17 +96,20 @@ io.on("connection", (socket) => {
 
     socket.on("finishDrawing", (data) => {
         //put all drawings into list to display later
-        drawnImageList[data.id][data.name] = data.drawing;
-        console.log("image list: " + JSON.stringify(drawnImageList));
-        console.dir(drawnImageList[data.id]);
+        roomID = data.id;
+        artist = data.name;
+        drawnImageList[roomID][artist] = data.drawing;
+        //console.log("image list: " + JSON.stringify(drawnImageList));
+        console.dir(drawnImageList[roomID]);
         console.log('////////////////////////');
-        console.dir(JSON.stringify(drawnImageList[data.id][data.name]));
+        console.dir(JSON.stringify(drawnImageList[roomID][artist]));
+        console.dir(JSON.stringify(drawnImageList[roomID]));
         //TODO check if all players have finished drawing. if so, show all drawings
-        // if (number of items in drawnImageList[data.roomID] == items in roomList[data.roomID].length - 1) {
-            io.sockets.to(data.id).emit("endOfGame", { 
-                image: drawnImageList[data.id][data.name]
-            });
-        //}
+
+        console.log(roomList[roomID]['guesses'].length);
+        console.log(roomList[roomID]['players'].length);
+
+        endOfGame(roomID);
     })
 
     socket.on("logToServer", (data) => {
@@ -105,3 +119,12 @@ io.on("connection", (socket) => {
 
 })
 
+function endOfGame(roomID) {
+    if(Object.keys(drawnImageList[roomID]).length == roomList[roomID]['players'].length - 1 &&
+        roomList[roomID]['guesses'].length == roomList[roomID]['players'].length - 1) {
+            io.sockets.to(roomID).emit("endOfGame", { 
+                image: drawnImageList[roomID][artist],
+                guesses: roomList[roomID]['guesses']
+            });
+        }
+}
