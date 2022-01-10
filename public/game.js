@@ -50,6 +50,7 @@ const transition = () => {
     $(".players").show();
     $("#record").show();
     $("#message").show();
+    $("#finishedArt").show();
 
     if (isHost) {
         $(".hostcontrols").show();
@@ -147,13 +148,11 @@ $(".finishdrawing").click(function () {
 
 socket.on("endOfGame", (data) => {
     let drawnImageData = data.image;
-    //logToServer(data.image, "client image list: "); TODO remove
-
     var img = document.createElement("img");
     img.src = drawnImageData;
 
     //display image in html
-    var block = document.getElementById("message");
+    var block = document.getElementById("finishedArt");
     block.appendChild(img);
 })
 

@@ -63,6 +63,7 @@ button {
 , #history
 , #message
 , #record
-, #describePokemonForm {
+, #describePokemonForm
+, #finishedArt {
     display: none;
 }
