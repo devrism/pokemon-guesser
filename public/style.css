@@ -61,6 +61,7 @@ button {
 , .hostcontrols
 , .playercontrols
 , #history
-, #message{
+, #message
+, #record {
     display: none;
 }

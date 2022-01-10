@@ -40,24 +40,20 @@ socket.on("joinGameFailure", (data)=>{
     $("#message").html(data.message).show();
 })
 
-/*The code below calls the transition() function for both players. 
-This transition() function takes care of all the UI changes to enter the game.
+/*This transition() function takes care of all the UI changes to enter the game.
 */
 const transition=()=>{
     $(".newRoom").hide();
     $(".joinRoom").hide();
     $(".leaderboard").show();
-    //$(".player1 .name").html(data.p1name);
-    //$(".player2 .name").html(data.p2name);
-    //$("#message").html(data.p2name+" is here!").show();
+    $("#record").show();
+    $("#message").show();
 
-    //my stuff!
     if(isHost) {
         $(".hostcontrols").show();
     } else {
         $(".playercontrols").show();
     }
-    $("#history").show();
 }
 
 //Host chooses pokemon to describe
@@ -68,6 +64,19 @@ $(".choosePokemonButton").click(function (){
         name:playerName
     });
 })
+
+// Update description event listener
+socket.on("updateDescription",(data)=>{
+    if ($("#descriptionHistory").html().includes("Waiting for host to describe Pokemon")) {
+        $("#descriptionHistory").html("");
+    }
+    var block = document.getElementById("descriptionHistory");
+    var li = document.createElement("li");
+    var text = document.createTextNode(data.pokemonDescription);
+    li.appendChild(text);
+    block.appendChild(li);
+})
+
 //Emitter for describing a pokemon from the host
 $(".describeButton").click(function (){
     description=$("input[name=describepokemon]").val();
@@ -77,10 +86,9 @@ $(".describeButton").click(function (){
         name:playerName,
         id:roomID
     });
-    $("#history").html(description).show();
 })
 
-//////// drawing canvas functions
+//////// drawing canvas functions/////////////////////////////////////////////////
 
 var drawMode = $('drawMode');
 const canvas = new fabric.Canvas("canvas");
@@ -115,14 +123,11 @@ $(".finishdrawing").click(function() {
     $("#canvas").hide();
 });
 
-// Update description event listener
-socket.on("updateDescription",(data)=>{
-    $("#history").html("Host writes: " + data.pokemonDescription);
-})
+///////////// end of game reveal controls/////////////////////////////////////////////
 
 socket.on("endOfGame", (data) => {
     let drawnImageData = data.image;
-    logToServer(data.image, "client image list: ");
+    //logToServer(data.image, "client image list: "); TODO remove
 
     var img = document.createElement("img");
     img.src = drawnImageData;

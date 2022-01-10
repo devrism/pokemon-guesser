@@ -96,8 +96,8 @@ io.on("connection", (socket) => {
     })
 
     socket.on("logToServer", (data) => {
-        console.log("Message from client (DEBUG): " + data.key);
-        console.log(data.value);
+        console.log("Message from client (DEBUG): " + data.message);
+        console.log(data.key);
     });
 
 })
