@@ -39,14 +39,24 @@ body{
     margin: auto 4vw;
 }
 #eraseMode {
-    background-image: url('eraser-inactive.png');
+    background-image: url('res/eraser-inactive.png');
     background-color: transparent;
     background-size: cover;
     width: 277px;
     height: 351px;
 }
 #eraseMode:hover {
-    background-image: url('eraser-active.png');
+    background-image: url('res/eraser-active.png');
+}
+#drawMode {
+    background-image: url('res/pen-inactive.png');
+    background-color: transparent;
+    background-size: cover;
+    width: 277px;
+    height: 351px;
+}
+#drawMode:hover {
+    background-image: url('res/pen-active.png');
 }
 
 button {

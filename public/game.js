@@ -111,7 +111,6 @@ $("#guessButton").click(function () {
 
 //////// drawing canvas functions/////////////////////////////////////////////////
 
-var drawMode = $('drawMode');
 const canvas = new fabric.Canvas("canvas");
 canvas.isDrawingMode = true;
 canvas.set('erasable', true);
@@ -123,7 +122,7 @@ $("#eraseMode").click(function () {
     canvas.freeDrawingBrush.width = 5;
 });
 
-$(".drawMode").click(function () {
+$("#drawMode").click(function () {
     canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
     canvas.freeDrawingBrush.width = 5;
     canvas.freeDrawingBrush.color = '#000000';
