@@ -18,7 +18,6 @@ const MAX_PLAYERS = 3; //TODO this is broken
 var roomList = {};
 var drawnImageList = {}; //the superior pattern over the way roomList is implemented
 //GAME VARIABLES
-var chosenPokemon = "";
 var description = "";
 
 /*All event listeners/emitters go inside the io.on block as shown below. 
@@ -35,26 +34,30 @@ io.on("connection", (socket) => {
     socket.on("createGame", (data) => {
         const roomID = randomstring.generate({ length: 4 });
         socket.join(roomID);
-        roomList[roomID] = [data.name];
+        roomList[roomID] = {};
+        roomList[roomID]['players'] = [data.name];
         drawnImageList[roomID] = {};
         socket.emit("newGame", { roomID: roomID });
 
         console.log(data.name + " created a game");
         console.log(roomList);
         console.log(roomList[roomID]);
+        console.log(roomList[roomID]['players']);
     })
 
     socket.on("choosepokemon", (data) => {
-        chosenPokemon = data.chosenPokemon;
+        let chosenPokemon = data.chosenPokemon;
+        roomList[data.roomID]['pokemon'] = chosenPokemon;
         console.log(data.name + " chose the Pokemon: " + chosenPokemon);
+        console.log(roomList);
     })
 
     //Join Game Listener
     socket.on("joinGame", (data) => {
         let room = roomList[data.roomID]; 
         if(room != undefined) {
-            if (room.length < MAX_PLAYERS && Object.keys(roomList).length < MAX_ROOMS) {
-                const playerCount = room.push(data.name);
+            if (room['players'].length < MAX_PLAYERS && Object.keys(roomList).length < MAX_ROOMS) {
+                const playerCount = room['players'].push(data.name);
                 socket.join(data.roomID);
                 io.sockets.to(data.roomID).emit("joinGameSuccess");
     

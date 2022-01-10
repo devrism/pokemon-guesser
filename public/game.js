@@ -61,7 +61,8 @@ $(".choosePokemonButton").click(function (){
     hostChoice=$("input[name=choosepokemon]").val();
     socket.emit('choosepokemon', {
         chosenPokemon:hostChoice,
-        name:playerName
+        name:playerName,
+        roomID:roomID
     });
 })
 
@@ -79,13 +80,14 @@ socket.on("updateDescription",(data)=>{
 
 //Emitter for describing a pokemon from the host
 $(".describeButton").click(function (){
-    description=$("input[name=describepokemon]").val();
+    description=$("textarea[id=describepokemon]").val();
     socket.emit('addDescription', {
         chosenPokemon:hostChoice,
         pokemonDescription:description,
         name:playerName,
         id:roomID
     });
+    document.getElementById("describepokemon").value=""; //clear textarea after hitting Submit
 })
 
 //////// drawing canvas functions/////////////////////////////////////////////////
