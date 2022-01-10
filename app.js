@@ -12,13 +12,12 @@ const server = express.listen(process.env.PORT || 4000, () => {
 express.use(app.static('public'));
 
 const io = socket(server);
-const MAX_ROOMS = 5;
-const MAX_PLAYERS = 3;
+const MAX_ROOMS = 15; //TODO this is broken
+const MAX_PLAYERS = 3; //TODO this is broken
 //ALL player info
 var roomList = [];
 var drawnImageList = {}; //the superior pattern over the way roomList is implemented
 //GAME VARIABLES
-let choice1 = "", choice2 = "";
 var chosenPokemon = "";
 var description = "";
 
@@ -91,40 +90,6 @@ io.on("connection", (socket) => {
         //}
     })
 
-    //Listener to Player 1's Choice
-    /*The code below gets player1’s choice and does nothing if player2 hasn’t picked their choice yet.
-    */
-    socket.on("choice1", (data) => {
-        choice1 = data.choice;
-        if (choice2 != "") {
-            console.log(data.name + " used " + choice1 + " against " + choice2);
-            result(data.roomID);
-        } else {
-            console.log(data.name + " used " + choice1);
-        }
-    });
-
-    //Listener to Player 2's Choice
-    socket.on("choice2", (data) => {
-        choice2 = data.choice;
-        if (choice1 != "") {
-            console.log(data.name + " used " + choice2 + " against " + choice1);
-            result(data.roomID);
-        } else {
-            console.log(data.name + " used " + choice2);
-        }
-    });
-
-    //Function to be executed after getting both choices
-    const result = (roomID) => {
-        var winner = getWinner(choice1, choice2);
-        io.sockets.to(roomID).emit("result", {
-            winner: winner
-        });
-        choice1 = "";
-        choice2 = "";
-    }
-
     socket.on("logToServer", (data) => {
         console.log("Message from client (DEBUG): " + data.key);
         console.log(data.value);
@@ -132,27 +97,3 @@ io.on("connection", (socket) => {
 
 })
 
-//Function to calculate winner
-const getWinner = (p, c) => {
-    if (p === c) {
-        return "draw";
-    } else if (p === "Rock") {
-        if (c === "Paper") {
-            return false;
-        } else {
-            return true;
-        }
-    } else if (p === "Paper") {
-        if (c === "Scissor") {
-            return false;
-        } else {
-            return true;
-        }
-    } else if (p === "Scissor") {
-        if (c === "Rock") {
-            return false;
-        } else {
-            return true;
-        }
-    }
-}
