@@ -15,7 +15,7 @@ const io = socket(server);
 const MAX_ROOMS = 15; //TODO this is broken
 const MAX_PLAYERS = 3; //TODO this is broken
 //ALL player info
-var roomList = [];
+var roomList = {};
 var drawnImageList = {}; //the superior pattern over the way roomList is implemented
 //GAME VARIABLES
 var chosenPokemon = "";
@@ -35,11 +35,13 @@ io.on("connection", (socket) => {
     socket.on("createGame", (data) => {
         const roomID = randomstring.generate({ length: 4 });
         socket.join(roomID);
-        roomList[roomID] = [{ name: data.name }];
+        roomList[roomID] = [data.name];
         drawnImageList[roomID] = {};
         socket.emit("newGame", { roomID: roomID });
 
-        console.log(data.name + " created a game")
+        console.log(data.name + " created a game");
+        console.log(roomList);
+        console.log(roomList[roomID]);
     })
 
     socket.on("choosepokemon", (data) => {
@@ -49,19 +51,22 @@ io.on("connection", (socket) => {
 
     //Join Game Listener
     socket.on("joinGame", (data) => {
-        if(Object.keys(roomList).length < MAX_ROOMS && roomList[data.roomID].length < MAX_PLAYERS) {
-            const playerCount = roomList[data.roomID].push({ name: data.name });
-            socket.join(data.roomID);
-            socket.to(data.roomID).emit("player2Joined", { p2name: data.name, p1name: roomList[data.roomID] });
-            socket.emit("player1Joined", { p2name: roomList[data.roomID], p1name: data.name });
+        let room = roomList[data.roomID]; 
+        if(room != undefined) {
+            if (room.length < MAX_PLAYERS && Object.keys(roomList).length < MAX_ROOMS) {
+                const playerCount = room.push(data.name);
+                socket.join(data.roomID);
+                io.sockets.to(data.roomID).emit("joinGameSuccess");
     
-            console.log(data.name + " joined a game with " + roomList[data.roomID])
-            console.log("Player count: " + playerCount);
-            console.log(roomList);
+                console.log(data.name + " joined a game with " + roomList[data.roomID])
+                console.log("Player count: " + playerCount);
+                console.log(roomList);
+            } else {
+                socket.emit("joinGameFailure", { message: "Error: room full" });
+            }
         } else {
-            console.log(JSON.stringify(roomList) + " /// " + Object.keys(roomList).length + " //// " + Object.keys(roomList));
-            var errorMessage = "Error: room unavailable";
-            socket.emit("failedToJoinGame", { message: errorMessage });
+            //console.log(room.length + " /// " + JSON.stringify(roomList) + " /// " + Object.keys(roomList).length + " //// " + Object.keys(roomList));
+            socket.emit("joinGameFailure", { message: "Error: room does not exist" });
         } 
     })
 

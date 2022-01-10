@@ -1,36 +1,30 @@
 //this is the client file
 const socket = io();
-let firstPlayer = false;
 let roomID;
 let playerName;
-let isHost;
-let hostChoice = false;
+let isHost = false;;
+let hostChoice;
 let description;
 let drawnImage;
 
-/*Create Game Event Emitter
-Once this event is triggered, the client grabs player1’s name and emits a socket event named createGame. 
-The variable firstPlayer identifies the player who started the game.
-This is used to identify the host */
+/*Create Game Event Emitter*/
 $(".createBtn").click(function(){
-    firstPlayer=true;
     playerName=$("input[name=p1name").val();
     socket.emit('createGame',{name:playerName});
-    
 })
 
 //New Game Created Listener
 socket.on("newGame",(data)=>{
     $(".newRoom").hide();
     $(".joinRoom").hide();
-    $("#message").html("Waiting for player 2, room ID is "+data.roomID).show();
+    $("#message").html("Waiting for players to join; room ID is "+data.roomID).show();
     roomID=data.roomID;
     isHost = true;
 })
 
 //Join Game Event Emitter
 $(".joinBtn").click(function(){
-    playerName=$("input[name=p2name").val();
+    playerName=$("input[name=playerName]").val();
     roomID=$("input[name=roomID").val();
     socket.emit('joinGame',{
         name:playerName,
@@ -39,30 +33,23 @@ $(".joinBtn").click(function(){
     isHost = false;
 })
 
-socket.on("failedToJoinGame", (data)=>{
+socket.on("joinGameSuccess", ()=>{
+    transition();
+})
+socket.on("joinGameFailure", (data)=>{
     $("#message").html(data.message).show();
-})
-
-//Player 2 Joined
-socket.on("player2Joined",(data)=>{
-    transition(data);
-})
-
-//Player 1 Joined
-socket.on("player1Joined",(data)=>{
-    transition(data);
 })
 
 /*The code below calls the transition() function for both players. 
 This transition() function takes care of all the UI changes to enter the game.
 */
-const transition=(data)=>{
+const transition=()=>{
     $(".newRoom").hide();
     $(".joinRoom").hide();
     $(".leaderboard").show();
-    $(".player1 .name").html(data.p1name);
-    $(".player2 .name").html(data.p2name);
-    $("#message").html(data.p2name+" is here!").show();
+    //$(".player1 .name").html(data.p1name);
+    //$(".player2 .name").html(data.p2name);
+    //$("#message").html(data.p2name+" is here!").show();
 
     //my stuff!
     if(isHost) {
@@ -92,23 +79,6 @@ $(".describeButton").click(function (){
     });
     $("#history").html(description).show();
 })
-
-//Result Event Listener
-socket.on("result",(data)=>{
-    if(data.winner=="draw"){
-        $("#message").html("It's a draw!");
-    }else{
-        updateDOM(firstPlayer==data.winner?"player1":"player2");
-    }
-})
-
-const updateDOM=(player)=>{
-    const playerDOM=$("."+player+" span");
-    const prevScore=parseInt(playerDOM.html().trim());
-    playerDOM.html(prevScore+1);
-    const winnerName=$("."+player+" .name").html().trim();
-    $("#message").html(winnerName+" scored a point!");
-}
 
 //////// drawing canvas functions
 
