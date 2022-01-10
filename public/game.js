@@ -90,6 +90,18 @@ $(".describeButton").click(function (){
     document.getElementById("describepokemon").value=""; //clear textarea after hitting Submit
 })
 
+$("#guessButton").click(function (){
+    guess=$("textarea[id=guessPokemon]").val();
+    socket.emit('submitGuess', {
+        guess:guess,
+        name:playerName,
+        roomID:roomID
+    });
+    document.getElementById("guessButton").textContent = "Awaiting results...";
+    document.getElementById("guessPokemon").disabled = true;
+})
+
+
 //////// drawing canvas functions/////////////////////////////////////////////////
 
 var drawMode = $('drawMode');
