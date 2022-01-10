@@ -1,10 +1,10 @@
 //this is the client file
-
 const socket = io();
 let firstPlayer = false;
 let roomID;
 let playerName;
-let hostChoice;
+let isHost;
+let hostChoice = false;
 let description;
 let drawnImage;
 
@@ -25,6 +25,7 @@ socket.on("newGame",(data)=>{
     $(".joinRoom").hide();
     $("#message").html("Waiting for player 2, room ID is "+data.roomID).show();
     roomID=data.roomID;
+    isHost = true;
 })
 
 //Join Game Event Emitter
@@ -35,6 +36,7 @@ $(".joinBtn").click(function(){
         name:playerName,
         roomID:roomID
     });
+    isHost = false;
 })
 
 socket.on("failedToJoinGame", (data)=>{
@@ -63,8 +65,11 @@ const transition=(data)=>{
     $("#message").html(data.p2name+" is here!").show();
 
     //my stuff!
-    $(".hostcontrols").show();
-    $(".playercontrols").show();
+    if(isHost) {
+        $(".hostcontrols").show();
+    } else {
+        $(".playercontrols").show();
+    }
     $("#history").show();
 }
 
@@ -131,17 +136,12 @@ $(".finishdrawing").click(function() {
     var img = document.createElement("img");
     img.src = drawnImageData;
 
-    //display image in html
-    var block = document.getElementById("message");
-    block.appendChild(img);
-
     socket.emit('finishDrawing',{ //todo make server listener
         name:playerName,
         id:roomID,
         drawing:drawnImageData
     });
     //hide canvas after submitting drawing
-    $("#canvas").css({'border': 'none'});
     $("#canvas").hide();
 });
 
