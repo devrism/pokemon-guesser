@@ -12,8 +12,8 @@ const server = express.listen(process.env.PORT || 4000, () => {
 express.use(app.static('public'));
 
 const io = socket(server);
-const MAX_ROOMS = 15; //TODO this is broken
-const MAX_PLAYERS = 3; //TODO this is broken
+const MAX_ROOMS = 15;
+const MAX_PLAYERS = 12;
 //ALL player info
 var roomList = {};
 var drawnImageList = {}; //the superior pattern over the way roomList is implemented
