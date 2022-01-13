@@ -151,6 +151,7 @@ function changeHandler(event) {
     brushSizeDisplay.innerHTML = "Brush Size: " + brushWidth;
 }
 
+
 $(".finishdrawing").click(function () {
     //save canvas as image
     let drawnImageData = canvas.toDataURL('jpg');
