@@ -55,10 +55,12 @@
 
             <div class="playercontrols">
                 Drawing space:<br> 
-                <canvas id="canvas" width="700" height="700"></canvas>
+                <canvas id="canvas" width="600" height="500" style="border:2px solid black;"></canvas>
                 <button id="eraseMode"><label class='buttonLabel'>Erase</label></button>
                 <button id="drawMode"><label class='buttonLabel'>Draw</label></button>
-                <input type="number" id="brushSize" name="brushSize" min="1" max="5">
+                <label><input type="range" id="brushSize" name="brushSize" min="1" max="50" step="1" value="5"></label>
+                <div id="brushSizeDisplay">Brush Size:</div>
+
                 <h3>Click the Done button when you're done drawing!</h3>
                 <button class="finishdrawing" id="finishdrawing">
                     Done
