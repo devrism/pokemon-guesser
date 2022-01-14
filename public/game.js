@@ -33,7 +33,6 @@ $(".joinBtn").click(function () {
     });
     isHost = false;
 })
-
 socket.on("joinGameSuccess", () => {
     transition();
     $("#message").html("The room code is " + data.roomID).show();
@@ -58,6 +57,7 @@ const transition = () => {
     } else {
         $(".playercontrols").show();
     }
+    $("#describePokemonForm").hide();
 }
 
 //Host chooses pokemon to describe
@@ -86,6 +86,14 @@ socket.on("updateDescription", (data) => {
     block.appendChild(li);
 })
 
+$("#startGame").click(function () {
+    //TODO hide the other host controls until this button is clicked, then show controls and hide button.
+    socket.emit('startGame', {
+        roomID: roomID
+    });
+    $("#startGame").hide();
+})
+
 //Emitter for describing a pokemon from the host
 $(".describeButton").click(function () {
     description = $("textarea[id=describepokemon]").val();
@@ -112,7 +120,7 @@ $("#guessButton").click(function () {
 })
 
 
-//////// drawing canvas functions/////////////////////////////////////////////////
+//////////////////////////////////////////////////// drawing canvas functions/////////////////////////////////////////////////
 
 const canvas = new fabric.Canvas("canvas");
 canvas.isDrawingMode = true;
@@ -173,10 +181,9 @@ $(".finishdrawing").click(function () {
     document.getElementById("finishdrawing").disabled = true;
 });
 
-///////////// end of game reveal controls/////////////////////////////////////////////
+////////////////////////////////////////////// end of game reveal controls/////////////////////////////////////////////
 
 socket.on("endOfGame", (data) => {
-    logToServer(data, "Data: ");
     let drawnImageData = data.image;
     var img = document.createElement("img");
     img.src = drawnImageData;
