@@ -96,6 +96,7 @@ $(".describeButton").click(function () {
         id: roomID
     });
     document.getElementById("describepokemon").value = ""; //clear textarea after hitting Submit
+    document.getElementById("describeButton").textContent = "Submit another description";
 })
 
 $("#guessButton").click(function () {
@@ -166,6 +167,7 @@ $(".finishdrawing").click(function () {
     });
     //hide canvas after submitting drawing
     canvas.isDrawingMode = false;
+
     $("#canvas").hide();
     document.getElementById("finishdrawing").textContent = "Submitted!";
     document.getElementById("finishdrawing").disabled = true;
