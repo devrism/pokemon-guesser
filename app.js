@@ -132,6 +132,7 @@ io.on("connection", (socket) => {
     })
 
     ////////////////////////////////////////////// Helper Functions  ////////////////////////////////////////////
+    //TODO comment out when done developing
     socket.on("logToServer", (data) => {
         console.log("Message from client (DEBUG): " + data.message);
         console.log(data.key);

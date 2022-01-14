@@ -196,6 +196,7 @@ socket.on("endOfGame", (data) => {
     logToServer(guesses, "Guesses: "); //TODO display guesses
 })
 
+//TODO comment out when done developing
 function logToServer(value, msg) {
     socket.emit('logToServer', {
         key: value,
