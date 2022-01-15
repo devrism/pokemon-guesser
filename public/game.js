@@ -258,8 +258,6 @@ const pickr = Pickr.create({
         'rgba(103, 58, 183, 1)',
         'rgba(63, 81, 181, 1)',
         'rgba(33, 150, 243, 1)',
-        'rgba(3, 169, 244, 1)',
-        'rgba(0, 188, 212, 1)',
         'rgba(0, 150, 136, 1)',
         'rgba(76, 175, 80, 1)',
         'rgba(139, 195, 74, 1)',
@@ -274,13 +272,7 @@ const pickr = Pickr.create({
         // Input / output Options
         interaction: {
             hex: true,
-            rgba: false,
-            hsla: false,
-            hsva: false,
-            cmyk: false,
-            input: true,
-            clear: false,
-            save: false
+            input: true
         }
     }
 });
