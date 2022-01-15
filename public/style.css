@@ -82,7 +82,8 @@ button {
 , #guessPokemonForm
 , #revealPokemonButton
 , #finishedDescribingButton
-, #finishedArt 
+, #finishDrawing
+, #artGallery 
 , #drawingControls 
 {
     display: none;

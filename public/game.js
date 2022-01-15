@@ -61,7 +61,7 @@ const transition = () => {
     $(".joinRoom").hide();
     $(".players").show();
     $("#message").show();
-    $("#finishedArt").show();
+    $("#artGallery").show();
 
     if (isHost) {
         $(".hostcontrols").show();
@@ -117,7 +117,7 @@ $(".describeButton").click(function () {
 socket.on("updateDescription", (data) => {
     $("#message").hide();
     $("#drawingControls").show();
-
+    $("#finishDrawing").show();
     var block = document.getElementById("descriptionHistory");
     var li = document.createElement("li");
     var text = document.createTextNode(data.pokemonDescription);
@@ -183,6 +183,10 @@ function changeHandler(event) {
 $(".finishDrawing").click(function () {
     //save canvas as image
     $("#guessPokemonForm").show();
+    $("#canvas").hide();
+    $("#drawingControls").hide();
+    $(".finishDrawing").hide();
+    
     let drawnImageData = canvas.toDataURL('jpg');
     var img = document.createElement("img");
     img.src = drawnImageData;
@@ -195,7 +199,6 @@ $(".finishDrawing").click(function () {
     //hide canvas after submitting drawing
     canvas.isDrawingMode = false;
 
-    $("#canvas").hide();
     document.getElementById("finishDrawing").textContent = "Submitted drawing!";
     document.getElementById("finishDrawing").disabled = true;
 });
@@ -208,7 +211,7 @@ socket.on("endOfGame", (data) => {
     img.src = drawnImageData;
 
     //display image in html
-    var block = document.getElementById("finishedArt");
+    var block = document.getElementById("artGallery");
     block.appendChild(img);
 
     let guesses = data.guesses;
