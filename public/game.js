@@ -12,7 +12,7 @@ let submittedDrawing = false;
 /*Create Game Event Emitter*/
 $(".createBtn").click(function () {
     playerName = $("input[name=hostName").val();
-    socket.emit('createGame', { name: playerName });
+    socket.emit('createGame', { name: playerName.replace(/\W/g, '') });
 })
 
 //New Game Created Listener
@@ -29,7 +29,7 @@ $(".joinBtn").click(function () {
     playerName = $("input[name=playerName]").val();
     roomID = $("input[name=roomID").val();
     socket.emit('joinGame', {
-        name: playerName,
+        name: playerName.replace(/\W/g, ''),
         roomID: roomID
     });
     isHost = false;
@@ -74,7 +74,7 @@ const transition = () => {
 
 //Host chooses pokemon to describe
 $(".choosePokemonButton").click(function () {
-    hostChoice = $("input[name=choosePokemon]").val();
+    hostChoice = $("input[name=choosePokemon]").val().replace(/\W/g, '');
     socket.emit('choosePokemon', {
         chosenPokemon: hostChoice,
         name: playerName,
@@ -102,9 +102,8 @@ socket.on("startGame", () => {
 
 //Emitter for describing a pokemon from the host
 $(".describeButton").click(function () {
-    description = $("textarea[id=describepokemon]").val();
+    description = $("textarea[id=describepokemon]").val().replace(/\W/g, '');
     socket.emit('addDescription', {
-        chosenPokemon: hostChoice,
         pokemonDescription: description,
         name: playerName,
         roomID: roomID
@@ -121,7 +120,6 @@ socket.on("updateDescription", (data) => {
         $("#drawingControls").show(); 
         $(".finishDrawing").show();
     }
-
     var block = document.getElementById("descriptionHistory");
     var li = document.createElement("li");
     var text = document.createTextNode(data.pokemonDescription);
@@ -130,7 +128,7 @@ socket.on("updateDescription", (data) => {
 })
 
 $("#guessButton").click(function () {
-    guess = $("input[name=guessPokemon]").val();
+    guess = $("input[name=guessPokemon]").val().replace(/\W/g, '');
     socket.emit('submitGuess', {
         guess: guess,
         name: playerName,
@@ -237,7 +235,9 @@ socket.on("endOfGame", (data) => {
     guesses.forEach(playerGuess => {
         guessString += playerGuess + "<br>"
     });
-    $("#message").html("The answer was: " + chosenPokemon + "<br>" + guessString);
+    $("#message").html("The answer was: " + chosenPokemon + "<br>" + guessString).show();
+    document.getElementById("revealPokemonButton").textContent = "Game has ended";
+    document.getElementById("revealPokemonButton").disabled = true;
 })
 
 //TODO comment out when done developing

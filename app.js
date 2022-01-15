@@ -39,7 +39,7 @@ io.on("connection", (socket) => {
             const roomID = randomstring.generate({ length: 4 });
             socket.join(roomID);
             roomList[roomID] = {};
-            roomList[roomID]['players'] = [data.name];
+            roomList[roomID]['players'] = [data.name.replace(/\W/g, '')];
             roomList[roomID]['hasGameStarted'] = false;
             roomList[roomID]['guesses'] = [];
             drawnImageList[roomID] = {};
@@ -64,7 +64,7 @@ io.on("connection", (socket) => {
             room['players'].length < MAX_PLAYERS &&
             Object.keys(roomList).length <= MAX_ROOMS) {
 
-                const playerCount = room['players'].push(data.name);
+                const playerCount = room['players'].push(data.name.replace(/\W/g, '')); //push method returns the new length
                 socket.join(roomID);
 
                 io.sockets.to(roomID).emit("joinGameSuccess", {
@@ -125,12 +125,12 @@ io.on("connection", (socket) => {
 
     ////////////////////////////////////////////// Player controls ////////////////////////////////////////////
     socket.on("submitGuess", (data) => {
-        let guess = data.guess;
+        let guess = data.guess.replace(/\W/g, '');
         let roomID = data.roomID;
         roomList[roomID]['guesses'].push(data.name + " guessed: " + guess);
         console.log(roomList[roomID]['guesses']);
         console.log(roomList[roomID]['pokemon']);
-        if(guess.replace(/\W/g, '').toUpperCase() === roomList[roomID]['pokemon'].replace(/\W/g, '').toUpperCase()) {
+        if(guess.toUpperCase() === roomList[roomID]['pokemon'].replace(/\W/g, '').toUpperCase()) {
             //socket.emit will only show this to the player who triggered it.
             //using io.sockets.to(roomID) will send the message to all players in the room.
             socket.emit("changeMessageDisplay", {
