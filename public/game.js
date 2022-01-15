@@ -7,6 +7,7 @@ let isHost = false;;
 let hostChoice;
 let description;
 let drawnImage;
+let submittedDrawing = false;
 
 /*Create Game Event Emitter*/
 $(".createBtn").click(function () {
@@ -116,8 +117,11 @@ $(".describeButton").click(function () {
 // Update description event listener
 socket.on("updateDescription", (data) => {
     $("#message").hide();
-    $("#drawingControls").show();
-    $("#finishDrawing").show();
+    if(!submittedDrawing) { 
+        $("#drawingControls").show(); 
+        $(".finishDrawing").show();
+    }
+
     var block = document.getElementById("descriptionHistory");
     var li = document.createElement("li");
     var text = document.createTextNode(data.pokemonDescription);
@@ -182,6 +186,7 @@ function changeHandler(event) {
 
 $(".finishDrawing").click(function () {
     //save canvas as image
+    submittedDrawing = true;
     $("#guessPokemonForm").show();
     $("#canvas").hide();
     $("#drawingControls").hide();
@@ -191,9 +196,9 @@ $(".finishDrawing").click(function () {
     var img = document.createElement("img");
     img.src = drawnImageData;
 
-    socket.emit('finishDrawing', { //todo make server listener
+    socket.emit('finishDrawing', {
         name: playerName,
-        id: roomID,
+        roomID: roomID,
         drawing: drawnImageData
     });
     //hide canvas after submitting drawing
@@ -205,17 +210,34 @@ $(".finishDrawing").click(function () {
 
 ////////////////////////////////////////////// end of game reveal controls/////////////////////////////////////////////
 
+$("#revealPokemonButton").click(function () {
+    socket.emit('revealPokemonToPlayers', {
+        roomID: roomID,
+    });
+});
+socket.on("revealPokemonToPlayers", (data) => {
+    let chosenPokemon = data.chosenPokemon;
+    $("#message").html("The answer was: " + chosenPokemon).show();
+});
+
 socket.on("endOfGame", (data) => {
     let drawnImageData = data.image;
-    var img = document.createElement("img");
+    let img = document.createElement("img");
+    let guesses = data.guesses;
+    let chosenPokemon = data.chosenPokemon;
+    let guessString = "";
+
     img.src = drawnImageData;
 
     //display image in html
     var block = document.getElementById("artGallery");
     block.appendChild(img);
 
-    let guesses = data.guesses;
-    logToServer(guesses, "Guesses: "); //TODO display guesses
+    //display guesses
+    guesses.forEach(playerGuess => {
+        guessString += playerGuess + "<br>"
+    });
+    $("#message").html("The answer was: " + chosenPokemon + "<br>" + guessString);
 })
 
 //TODO comment out when done developing

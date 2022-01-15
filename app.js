@@ -116,6 +116,13 @@ io.on("connection", (socket) => {
         io.sockets.to(roomID).emit("startGame", {}); 
     })
 
+    socket.on("revealPokemonToPlayers", (data) => {
+        let roomID = data.roomID;
+        io.sockets.to(roomID).emit("revealPokemonToPlayers", { 
+            chosenPokemon: roomList[roomID]['pokemon']
+        }); 
+    })
+
     ////////////////////////////////////////////// Player controls ////////////////////////////////////////////
     socket.on("submitGuess", (data) => {
         let guess = data.guess;
@@ -129,6 +136,10 @@ io.on("connection", (socket) => {
             socket.emit("changeMessageDisplay", {
                 message: "Congratulations! You guessed the right Pokemon!" 
             })
+        } else {
+            socket.emit("changeMessageDisplay", {
+                message: "You did not guess correctly." 
+            })
         }
         if(endOfGame(roomID)) {
             endTheGame(roomID);
@@ -137,7 +148,7 @@ io.on("connection", (socket) => {
 
     socket.on("finishDrawing", (data) => {
         //put all drawings into list to display later
-        roomID = data.id;
+        roomID = data.roomID;
         artist = data.name;
         drawnImageList[roomID][artist] = data.drawing;
         //console.log("image list: " + JSON.stringify(drawnImageList));
@@ -175,6 +186,7 @@ function endOfGame(roomID) {
 function endTheGame(roomID) {
     io.sockets.to(roomID).emit("endOfGame", { 
         image: drawnImageList[roomID][artist],
-        guesses: roomList[roomID]['guesses']
+        guesses: roomList[roomID]['guesses'],
+        chosenPokemon: roomList[roomID]['pokemon']
     });
 }
