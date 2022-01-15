@@ -32,14 +32,15 @@
             </div>
 
             <div class="players">
-                <h3>Player List:</h3>
-                <ul id="playerList"></ul>
+                <h3 id="playerListTitle">Player List:</h3>
+                <div id="playerList"></div>
             </div>
 
             <div class="hostcontrols">
                 You are the host!
                 <button class="startGame btn btn-primary" id="startGame">All players are in (begin game)!</button>
-                <form onsubmit="return false">       
+
+                <form id="choosePokemonForm" onsubmit="return false">       
                     Choose your Pokemon<br>                 
                     <input name="choosePokemon" id="choosePokemon" type="text" placeholder="Name of Pokemon">
                     <button class="choosePokemonButton btn btn-primary" id="choosePokemonButton">Submit</button>
@@ -49,28 +50,30 @@
                     Describe your Pokemon<br>                    
                     <textarea id="describepokemon" rows="5" cols="70"></textarea>
                     <button id="describeButton" class="describeButton btn btn-primary">Submit</button>
-                    <button class="finishedDescribingButton btn btn-primary">I'm done writing everything!</button>
+                    <button id="finishedDescribingButton" class="finishedDescribingButton btn btn-primary">I'm done writing everything!</button>
                 </form>
 
-                <button class="btn btn-primary">
+                <button id="revealPokemonButton" class="btn btn-primary">
                     Reveal Pokemon to all players
                 </button>
             </div>
 
             <div class="playercontrols">
-                Drawing space:<br> 
-                <canvas id="canvas" width="800" height="500"></canvas>
-                <button id="eraseMode"><label class='buttonLabel'>Erase</label></button>
-                <button id="drawMode"><label class='buttonLabel'>Draw</label></button>
-                <div id="brushSizeDisplay">Brush Size:</div>
-                <label><input type="range" id="brushSize" name="brushSize" min="1" max="100" step="1" value="5"></label>
-                <div id="colorPickerLabel">Color Picker</div>
-                <div id="colorPicker"></div>
-                <h3>Click the Done button when you're done drawing!</h3>
-                <button class="finishdrawing" id="finishdrawing">
-                    Done
-                </button>
-
+                <div id="drawingControls">
+                    Drawing space:<br> 
+                    <canvas id="canvas" width="800" height="500"></canvas>
+                    <button id="eraseMode"><label class='buttonLabel'>Erase</label></button>
+                    <button id="drawMode"><label class='buttonLabel'>Draw</label></button>
+                    <div id="brushSizeDisplay">Brush Size:</div>
+                    <label><input type="range" id="brushSize" name="brushSize" min="1" max="100" step="1" value="5"></label>
+                    <div id="colorPickerLabel">Color Picker</div>
+                    <div id="colorPicker"></div>
+                    <h3>Click the Done button when you're done drawing!</h3>
+                    <button class="finishDrawing" id="finishDrawing">
+                        Done
+                    </button>
+                </div>
+                
                 <form id="guessPokemonForm" onsubmit="return false">
                     Who's That Pokemon?<br>                    
                     <input id="guessPokemon" name="guessPokemon" type="text" placeholder="Name of Pokemon">
@@ -86,7 +89,6 @@
             <div id="record">
                 <h3>Submitted Descriptions:</h3>
                 <ol id="descriptionHistory">
-                    Waiting for host to describe Pokemon...
                 </ol>
             </div>
             <div id="finishedArt"></div>

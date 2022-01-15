@@ -78,6 +78,12 @@ button {
 , #message
 , #record
 , #describePokemonForm
-, #finishedArt {
+, #choosePokemonForm
+, #guessPokemonForm
+, #revealPokemonButton
+, #finishedDescribingButton
+, #finishedArt 
+, #drawingControls 
+{
     display: none;
 }

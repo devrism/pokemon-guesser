@@ -9,7 +9,7 @@ const server = express.listen(process.env.PORT || 4000, () => {
 express.use(app.static('public'));
 const io = socket(server);
 const MAX_ROOMS = 3;
-const MAX_PLAYERS = 5;
+const MAX_PLAYERS = 12;
 
 /* roomList is a JS object with this pattern:
 {
@@ -50,33 +50,44 @@ io.on("connection", (socket) => {
             console.log(roomList[roomID]);
             console.log(roomList[roomID]['players']);
         } else {
-            socket.emit("joinGameFailure", { message: "Error: maximum room limit reached" });
+            socket.emit("changeMessageDisplay", { message: "Error: maximum room limit reached" });
             //TODO when host leaves lobby, remove room from list and kill connection?
         }
     })
 
     //Join Game Listener
     socket.on("joinGame", (data) => {
-        let room = roomList[data.roomID]; 
+        let roomID = data.roomID;
+        let room = roomList[roomID]; 
         if(room != undefined) {
-            if (roomList[data.roomID]['hasGameStarted'] == false && 
-            room['players'].length < MAX_PLAYERS && 
-            Object.keys(roomList).length < MAX_ROOMS) {
+            if (roomList[roomID]['hasGameStarted'] == false &&
+            room['players'].length < MAX_PLAYERS &&
+            Object.keys(roomList).length <= MAX_ROOMS) {
 
                 const playerCount = room['players'].push(data.name);
-                socket.join(data.roomID);
-                io.sockets.to(data.roomID).emit("joinGameSuccess");
+                socket.join(roomID);
+
+                io.sockets.to(roomID).emit("joinGameSuccess", {
+                    currentPlayers: room['players'],
+                    numberOfCurrentPlayers: room['players'].length,
+                    maxPlayerLimit: MAX_PLAYERS,
+                    roomID: roomID
+                });
     
-                console.log(data.name + " joined a game with " + JSON.stringify(roomList[data.roomID]))
+                console.log(data.name + " joined a game with " + JSON.stringify(roomList[roomID]))
                 console.log("Player count: " + playerCount);
                 console.log(roomList);
 
             } else {
-                socket.emit("joinGameFailure", { message: "Error: room full" });
+                socket.emit("changeMessageDisplay", { 
+                    message: "Error: room full" 
+                });
             }
         } else {
             //console.log(room.length + " /// " + JSON.stringify(roomList) + " /// " + Object.keys(roomList).length + " //// " + Object.keys(roomList));
-            socket.emit("joinGameFailure", { message: "Error: room does not exist" });
+            socket.emit("changeMessageDisplay", { 
+                message: "Error: room does not exist" 
+            });
         } 
     })
 
@@ -88,18 +99,21 @@ io.on("connection", (socket) => {
         console.log(roomList);
     })
     socket.on("addDescription", (data) => {
+        let roomID = data.roomID;
         let description = data.pokemonDescription;
+        let name = data.name;
         console.log(data.name + " writes: " + description);
 
-        io.sockets.to(data.id).emit("updateDescription", { 
+        io.sockets.to(roomID).emit("updateDescription", { 
             pokemonDescription: description,
-            name: data.name
+            name: name
         }); 
     })
     // prevent more players from joining if the game has started
     socket.on("startGame", (data) => {
         let roomID = data.roomID;
         roomList[roomID]['hasGameStarted'] = true;
+        io.sockets.to(roomID).emit("startGame", {}); 
     })
 
     ////////////////////////////////////////////// Player controls ////////////////////////////////////////////
@@ -108,7 +122,14 @@ io.on("connection", (socket) => {
         let roomID = data.roomID;
         roomList[roomID]['guesses'].push(data.name + " guessed: " + guess);
         console.log(roomList[roomID]['guesses']);
-
+        console.log(roomList[roomID]['pokemon']);
+        if(guess.replace(/\W/g, '').toUpperCase() === roomList[roomID]['pokemon'].replace(/\W/g, '').toUpperCase()) {
+            //socket.emit will only show this to the player who triggered it.
+            //using io.sockets.to(roomID) will send the message to all players in the room.
+            socket.emit("changeMessageDisplay", {
+                message: "Congratulations! You guessed the right Pokemon!" 
+            })
+        }
         if(endOfGame(roomID)) {
             endTheGame(roomID);
         }

@@ -33,12 +33,24 @@ $(".joinBtn").click(function () {
     });
     isHost = false;
 })
-socket.on("joinGameSuccess", () => {
+socket.on("joinGameSuccess", (data) => {
+    let playerList = data.currentPlayers;
+    let roomID = data.roomID;
+    let numberOfPlayers = data.numberOfCurrentPlayers;
+    let maxPlayerLimit = data.maxPlayerLimit;
+
     transition();
-    $("#message").html("The room code is " + data.roomID).show();
+    $("#message").html("Waiting for host to start game. The room code is " + roomID).show();
+    $("#playerListTitle").html("Player List: " + numberOfPlayers + "/" + maxPlayerLimit);
+
+    let playerListDisplay = "";
+    playerList.forEach(player => {
+        playerListDisplay += player + "<br>";
+    });
+    $("#playerList").html(playerListDisplay);
 })
 
-socket.on("joinGameFailure", (data) => {
+socket.on("changeMessageDisplay", (data) => {
     $("#message").html(data.message).show();
 })
 
@@ -48,7 +60,6 @@ const transition = () => {
     $(".newRoom").hide();
     $(".joinRoom").hide();
     $(".players").show();
-    $("#record").show();
     $("#message").show();
     $("#finishedArt").show();
 
@@ -73,25 +84,19 @@ $(".choosePokemonButton").click(function () {
     $("#describePokemonForm").show();
 })
 
-// Update description event listener
-socket.on("updateDescription", (data) => {
-    $("#message").hide();
-    if ($("#descriptionHistory").html().includes("Waiting for host to describe Pokemon")) {
-        $("#descriptionHistory").html("");
-    }
-    var block = document.getElementById("descriptionHistory");
-    var li = document.createElement("li");
-    var text = document.createTextNode(data.pokemonDescription);
-    li.appendChild(text);
-    block.appendChild(li);
-})
-
 $("#startGame").click(function () {
-    //TODO hide the other host controls until this button is clicked, then show controls and hide button.
     socket.emit('startGame', {
         roomID: roomID
     });
     $("#startGame").hide();
+    $("#message").hide();
+    $("#record").show();
+    $("#choosePokemonForm").show();
+})
+//all client game controls are hidden until host starts game
+socket.on("startGame", () => {
+    $("#record").show();
+    $("#message").html("Waiting for host to write a description...");
 })
 
 //Emitter for describing a pokemon from the host
@@ -101,10 +106,23 @@ $(".describeButton").click(function () {
         chosenPokemon: hostChoice,
         pokemonDescription: description,
         name: playerName,
-        id: roomID
+        roomID: roomID
     });
     document.getElementById("describepokemon").value = ""; //clear textarea after hitting Submit
     document.getElementById("describeButton").textContent = "Submit another description";
+    $("#revealPokemonButton").show();
+    $("#finishedDescribingButton").show();
+})
+// Update description event listener
+socket.on("updateDescription", (data) => {
+    $("#message").hide();
+    $("#drawingControls").show();
+
+    var block = document.getElementById("descriptionHistory");
+    var li = document.createElement("li");
+    var text = document.createTextNode(data.pokemonDescription);
+    li.appendChild(text);
+    block.appendChild(li);
 })
 
 $("#guessButton").click(function () {
@@ -114,7 +132,7 @@ $("#guessButton").click(function () {
         name: playerName,
         roomID: roomID
     });
-    document.getElementById("guessButton").textContent = "Awaiting results...";
+    document.getElementById("guessButton").textContent = "Submitted Guess";
     document.getElementById("guessButton").disabled = true;
     document.getElementById("guessPokemon").disabled = true;
 })
@@ -162,8 +180,9 @@ function changeHandler(event) {
 }
 
 
-$(".finishdrawing").click(function () {
+$(".finishDrawing").click(function () {
     //save canvas as image
+    $("#guessPokemonForm").show();
     let drawnImageData = canvas.toDataURL('jpg');
     var img = document.createElement("img");
     img.src = drawnImageData;
@@ -177,8 +196,8 @@ $(".finishdrawing").click(function () {
     canvas.isDrawingMode = false;
 
     $("#canvas").hide();
-    document.getElementById("finishdrawing").textContent = "Submitted!";
-    document.getElementById("finishdrawing").disabled = true;
+    document.getElementById("finishDrawing").textContent = "Submitted drawing!";
+    document.getElementById("finishDrawing").disabled = true;
 });
 
 ////////////////////////////////////////////// end of game reveal controls/////////////////////////////////////////////
