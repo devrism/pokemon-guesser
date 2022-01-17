@@ -8,8 +8,8 @@ const server = express.listen(process.env.PORT || 4000, () => {
 })
 express.use(app.static('public'));
 const io = socket(server);
-const MAX_ROOMS = 13;
-const MAX_PLAYERS = 12;
+const MAX_ROOMS = 33;
+const MAX_PLAYERS = 12; //per room
 
 /* roomList is a JS object with this pattern:
 {

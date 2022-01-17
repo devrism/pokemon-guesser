@@ -126,7 +126,7 @@ socket.on("updateDescription", (data) => {
     var text = document.createTextNode(data.pokemonDescription);
     li.appendChild(text);
     block.appendChild(li);
-    block.appendChild(document.createElement("br"));
+    setTimeout(()=> li.classList.add("animate"), 500);
 
     //scroll the scrollbar to the bottom when a new description is added
     var descriptionHistory = document.getElementById("record");
@@ -221,6 +221,12 @@ $("#revealPokemonButton").click(function () {
 socket.on("revealPokemonToPlayers", (data) => {
     let chosenPokemon = data.chosenPokemon;
     $("#message").html("The answer was: " + chosenPokemon).show();
+});
+
+$("#revealDrawingButton").click(function () { //TODO
+    socket.emit('revealDrawings', {
+        roomID: roomID,
+    });
 });
 
 socket.on("endOfGame", (data) => {
