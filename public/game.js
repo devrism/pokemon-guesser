@@ -74,13 +74,14 @@ const transition = () => {
 
 //Host chooses pokemon to describe
 $(".choosePokemonButton").click(function () {
-    hostChoice = $("input[name=choosePokemon]").val().replace(/\W/g, '');
+    hostChoice = $("input[name=choosePokemon]").val().replace(/[&<"]/g, '');
     socket.emit('choosePokemon', {
         chosenPokemon: hostChoice,
         name: playerName,
         roomID: roomID
     });
     document.getElementById("choosePokemonButton").textContent = "Good luck!";
+    document.getElementById("choosePokemonButton").disabled = true;
     document.getElementById("choosePokemon").disabled = true;
     $("#describePokemonForm").show();
 })
@@ -102,7 +103,7 @@ socket.on("startGame", () => {
 
 //Emitter for describing a pokemon from the host
 $(".describeButton").click(function () {
-    description = $("textarea[id=describepokemon]").val().replace(/\W/g, '');
+    description = $("textarea[id=describepokemon]").val().replace(/[&<"]/g, '');
     socket.emit('addDescription', {
         pokemonDescription: description,
         name: playerName,
@@ -125,10 +126,15 @@ socket.on("updateDescription", (data) => {
     var text = document.createTextNode(data.pokemonDescription);
     li.appendChild(text);
     block.appendChild(li);
+    block.appendChild(document.createElement("br"));
+
+    //scroll the scrollbar to the bottom when a new description is added
+    var descriptionHistory = document.getElementById("record");
+    descriptionHistory.scrollTop = descriptionHistory.scrollHeight;
 })
 
 $("#guessButton").click(function () {
-    guess = $("input[name=guessPokemon]").val().replace(/\W/g, '');
+    guess = $("input[name=guessPokemon]").val().replace(/[&<"]/g, '');
     socket.emit('submitGuess', {
         guess: guess,
         name: playerName,
@@ -180,7 +186,6 @@ function changeHandler(event) {
     canvas.freeDrawingBrush.width = brushWidth;
     brushSizeDisplay.innerHTML = "Brush Size: " + brushWidth;
 }
-
 
 $(".finishDrawingButton").click(function () {
     //save canvas as image
@@ -238,6 +243,10 @@ socket.on("endOfGame", (data) => {
     $("#message").html("The answer was: " + chosenPokemon + "<br>" + guessString).show();
     document.getElementById("revealPokemonButton").textContent = "Game has ended";
     document.getElementById("revealPokemonButton").disabled = true;
+    document.getElementById("describeButton").disabled = true;
+    document.getElementById("describepokemon").disabled = true;
+    document.getElementById("finishedDescribingButton").disabled = true;
+    document.getElementById("revealDrawingButton").disabled = true;
 })
 
 //TODO comment out when done developing

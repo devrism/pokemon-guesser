@@ -2,35 +2,25 @@
 https://grid.layoutit.com/
 https://csslayout.io/
 */
-html{
-    /*background-image: url("res/ditto.png");*/
-    background-repeat: repeat;
+.container{
+    position:absolute;
 }
-
-body{
+.body{
+    margin: auto;
+    height:70vh;
+    width:70vw;
     margin-top:3.5%;
     text-align: center;
-    /*background-image: url("background.png");
-    background-repeat: no-repeat;
-    background-color: transparent;
-    background-position: center; */
+    display: grid;
+    grid:
+        "body sidebar" 1fr
+        / 80% 1fr;
+    gap: 20px;
 }
 
-/*  .newRoom
-, #message {
-    position: relative;
-    padding-top:20vh;
-}*/
-
-/* .container{
-    position: relative;
-    width: 100%;
-    height: 70vh;
-} */
-
-.newRoom, .joinRoom{
+/* .newRoom, .joinRoom{
     margin: 4vh 1vw;
-}
+} */
 
 #eraseMode {
     background-image: url('res/eraser-inactive.png');
@@ -53,10 +43,24 @@ body{
     background-image: url('res/pen-active.png');
 }
 #canvas {
+    position:fixed;
     border:2px solid black;
     float:left;
 }
-
+#record {
+    grid-area: sidebar;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    text-align:left;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
 button {
 	border: none;
     padding: 0;
@@ -90,6 +94,8 @@ button {
     position: relative;
     border:2px solid black;
     background-color: white;
+    grid-area: body;
+    height:100%;
 }
 
 .layered-card::before {

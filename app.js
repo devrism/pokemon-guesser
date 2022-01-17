@@ -100,7 +100,7 @@ io.on("connection", (socket) => {
     })
     socket.on("addDescription", (data) => {
         let roomID = data.roomID;
-        let description = data.pokemonDescription;
+        let description = data.pokemonDescription.replace(/[&<"]/g, '');
         let name = data.name;
         console.log(data.name + " writes: " + description);
 
@@ -130,7 +130,7 @@ io.on("connection", (socket) => {
         roomList[roomID]['guesses'].push(data.name + " guessed: " + guess);
         console.log(roomList[roomID]['guesses']);
         console.log(roomList[roomID]['pokemon']);
-        if(guess.toUpperCase() === roomList[roomID]['pokemon'].replace(/\W/g, '').toUpperCase()) {
+        if(guess.toUpperCase() === roomList[roomID]['pokemon'].replace(/[&<"]/g, '').toUpperCase()) {
             //socket.emit will only show this to the player who triggered it.
             //using io.sockets.to(roomID) will send the message to all players in the room.
             socket.emit("changeMessageDisplay", {
