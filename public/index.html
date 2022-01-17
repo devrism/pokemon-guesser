@@ -14,80 +14,94 @@
 
     <div class="container">
         <div class="body">
-            <div class="newRoom">
-                <h4>Host New Game</h4>
-                <form onsubmit="return false">                        
-                    <input name="hostName" type="text" placeholder="Nickname">
-                    <button class="createBtn btn btn-primary">Create</button>
-                </form>
-            </div>
-            
-            <div class="joinRoom">
-                <h4>Join Existing Game</h4>
-                <form onsubmit="return false">                        
-                    <input name="playerName" type="text" placeholder="Nickname">
-                    <input name="roomID" type="text" placeholder="Room code">
-                    <button class="joinBtn btn btn-primary">Join</button>
-                </form>
-            </div>
-
-            <div class="players">
-                <h3 id="playerListTitle">Player List:</h3>
-                <div id="playerList"></div>
-            </div>
-
-            <div class="hostcontrols">
-                You are the host!
-                <button class="startGame btn btn-primary" id="startGame">All players are in (begin game)!</button>
-
-                <form id="choosePokemonForm" onsubmit="return false">       
-                    Choose your Pokemon<br>                 
-                    <input name="choosePokemon" id="choosePokemon" type="text" placeholder="Name of Pokemon">
-                    <button class="choosePokemonButton btn btn-primary" id="choosePokemonButton">Submit</button>
-                </form>
-
-                <form id="describePokemonForm" onsubmit="return false">
-                    Describe your Pokemon<br>                    
-                    <textarea id="describepokemon" rows="5" cols="70"></textarea>
-                    <button id="describeButton" class="describeButton btn btn-primary">Submit</button>
-                    <button id="finishedDescribingButton" class="finishedDescribingButton btn btn-primary">I'm done writing everything!</button>
-                </form>
-
-                <button id="revealPokemonButton" class="revealPokemonButton btn btn-primary">
-                    Reveal Pokemon to all players
-                </button>
-            </div>
-
-            <div class="playercontrols">
-                <div id="drawingControls">
-                    Drawing space:<br> 
-                    <canvas id="canvas" width="800" height="500"></canvas>
-                    <button id="eraseMode"><label class='buttonLabel'>Erase</label></button>
-                    <button id="drawMode"><label class='buttonLabel'>Draw</label></button>
-                    <div id="brushSizeDisplay">Brush Size:</div>
-                    <label><input type="range" id="brushSize" name="brushSize" min="1" max="100" step="1" value="5"></label>
-                    <div id="colorPickerLabel">Color Picker</div>
-                    <div id="colorPicker"></div>
-                </div>
-
-                <div class="finishDrawing">
-                    <h3>Click the Done button when you're done drawing!</h3>
-                    <button class="finishDrawing" id="finishDrawing">
-                        Done
-                    </button>
+            <div class="layered-card">
+                <div class="newRoom">
+                    <h4>Host New Game</h4>
+                    <form onsubmit="return false">                        
+                        <input name="hostName" type="text" placeholder="Nickname">
+                        <button class="createBtn btn btn-primary">Create</button>
+                    </form>
                 </div>
                 
-                <form id="guessPokemonForm" onsubmit="return false">
-                    Who's That Pokemon?<br>                    
-                    <input id="guessPokemon" name="guessPokemon" type="text" placeholder="Name of Pokemon">
-                    <button id="guessButton">Submit Guess</button>
-                </form>
+                <div class="joinRoom">
+                    <h4>Join Existing Game</h4>
+                    <form onsubmit="return false">                        
+                        <input name="playerName" type="text" placeholder="Nickname">
+                        <input name="roomID" type="text" placeholder="Room code">
+                        <button class="joinBtn btn btn-primary">Join</button>
+                    </form>
+                </div>
+            
+                <div class="players">
+                    <h3 id="playerListTitle">Player List:</h3>
+                    <div id="playerList"></div>
+                </div>
 
-            </div><br>
+                <div class="hostControls">
+                    You are the host!
+                    <button class="startGame btn btn-primary" id="startGame">All players are in (begin game)!</button>
 
-            <div id="message">
-                Waiting for host to choose Pokemon...
+                    <form id="choosePokemonForm" onsubmit="return false">       
+                        Choose your Pokemon<br>                 
+                        <input name="choosePokemon" id="choosePokemon" type="text" placeholder="Name of Pokemon">
+                        <button class="choosePokemonButton btn btn-primary" id="choosePokemonButton">Submit</button>
+                    </form>
+
+                    <form id="describePokemonForm" onsubmit="return false">
+                        Describe your Pokemon<br>                    
+                        <textarea id="describepokemon" rows="5" cols="70"></textarea>
+                        <button id="describeButton" class="describeButton btn btn-primary">Submit</button>
+                        <button id="finishedDescribingButton" class="finishedDescribingButton btn btn-primary">I'm done writing everything!</button>
+                    </form>
+
+                    <div id="gameResultsControls">
+                        <button id="revealPokemonButton" class="revealPokemonButton btn btn-primary">
+                            Reveal Pokemon to all players
+                        </button>
+
+                        <button id="revealDrawingButton" class="revealDrawingButton btn btn-primary">
+                            Show results
+                        </button>
+                        <button id="showNextDrawingButton" class="showNextDrawingButton btn btn-primary">
+                            Show next result
+                        </button>
+                        <div id="gameResults"></div>
+                    </div>
+                </div>
+
+                <div class="playerControls">
+                    <div id="drawingControls">
+                        Drawing space:<br> 
+                        <canvas id="canvas" width="800" height="500"></canvas>
+                        <div class="drawingTools">
+                            <button id="eraseMode"><label class='buttonLabel'>Erase</label></button>
+                            <button id="drawMode"><label class='buttonLabel'>Draw</label></button>
+                            <div id="brushSizeDisplay">Brush Size:</div>
+                            <label><input type="range" id="brushSize" name="brushSize" min="1" max="100" step="1" value="5"></label>
+                            <div id="colorPickerLabel">Color Picker</div>
+                            <div id="colorPicker"></div>
+                        </div>
+                    </div>
+
+                    <div class="finishDrawing">
+                        <h3>Click the Done button when you're done drawing!</h3>
+                        <button class="finishDrawing" id="finishDrawing">
+                            Done
+                        </button>
+                    </div>
+                    
+                    <form id="guessPokemonForm" onsubmit="return false">
+                        Who's That Pokemon?<br>                    
+                        <input id="guessPokemon" name="guessPokemon" type="text" placeholder="Name of Pokemon">
+                        <button id="guessButton">Submit Guess</button>
+                    </form>
+
+                </div><br>
+                <div id="message">
+                    Waiting for host to choose Pokemon...
+                </div>
             </div>
+
             <br>  
             <div id="record">
                 <h3>Submitted Descriptions:</h3>

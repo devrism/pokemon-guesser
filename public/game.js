@@ -65,9 +65,9 @@ const transition = () => {
     $("#artGallery").show();
 
     if (isHost) {
-        $(".hostcontrols").show();
+        $(".hostControls").show();
     } else {
-        $(".playercontrols").show();
+        $(".playerControls").show();
     }
     $("#describePokemonForm").hide();
 }
@@ -117,7 +117,7 @@ $(".describeButton").click(function () {
 socket.on("updateDescription", (data) => {
     $("#message").hide();
     if(!submittedDrawing) { 
-        $("#drawingControls").show(); 
+        $("#drawingControls").css('display', 'flex'); 
         $(".finishDrawing").show();
     }
     var block = document.getElementById("descriptionHistory");
@@ -269,7 +269,6 @@ const pickr = Pickr.create({
         preview: true,
         opacity: true,
         hue: true,
-        // Input / output Options
         interaction: {
             hex: true,
             input: true
@@ -282,3 +281,5 @@ pickr.on("change", function (e) {
     brushColor = e.toHEXA().toString();
     canvas.freeDrawingBrush.color = brushColor;
 });
+
+//TODO gameResultsControls stuff

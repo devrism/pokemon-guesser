@@ -1,9 +1,14 @@
+/*TODO https://layout.bradwoods.io/customize 
+https://grid.layoutit.com/
+https://csslayout.io/
+*/
 html{
     /*background-image: url("ditto.png");*/
     background-repeat: repeat;
 }
 
 body{
+    margin-top:3.5%;
     text-align: center;
     /*background-image: url("background.png");
     background-repeat: no-repeat;
@@ -41,9 +46,9 @@ body{
 #eraseMode {
     background-image: url('res/eraser-inactive.png');
     background-color: transparent;
-    background-size: cover;
-    width: 277px;
-    height: 351px;
+    background-size: 97px 123px;
+    width: 97px;
+    height: 123px;
 }
 #eraseMode:hover {
     background-image: url('res/eraser-active.png');
@@ -51,9 +56,9 @@ body{
 #drawMode {
     background-image: url('res/pen-inactive.png');
     background-color: transparent;
-    background-size: cover;
-    width: 277px;
-    height: 351px;
+    background-size: 97px 123px;
+    width: 97px;
+    height: 123px;
 }
 #drawMode:hover {
     background-image: url('res/pen-active.png');
@@ -72,8 +77,8 @@ button {
 }
   .players
 , .controls
-, .hostcontrols
-, .playercontrols
+, .hostControls
+, .playerControls
 , #history
 , #message
 , #record
@@ -88,4 +93,41 @@ button {
 , #drawingControls 
 {
     display: none;
+}
+
+/* ///////////////////////////////////////// css layout dealeos */
+
+.layered-card {
+    position: relative;
+    border:2px solid black;
+    background-color: white;
+}
+
+.layered-card::before {
+    background: rgba(0, 0, 0, 0.3);
+    content: '';
+
+    /* Position */
+    top: 0;
+    left: 0;
+    position: absolute;
+    transform: translate(1rem, 1rem);
+
+    /* Size */
+    height: 100%;
+    width: 100%;
+
+    /* Display under the main content */
+    z-index: -1;
+}
+
+.drawingTools {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    float:right;
+  }
+
+#drawingControls {
+    justify-content: center;
 }
