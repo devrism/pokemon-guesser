@@ -182,13 +182,13 @@ function changeHandler(event) {
 }
 
 
-$(".finishDrawing").click(function () {
+$(".finishDrawingButton").click(function () {
     //save canvas as image
     submittedDrawing = true;
     $("#guessPokemonForm").show();
     $("#canvas").hide();
     $("#drawingControls").hide();
-    $(".finishDrawing").hide();
+    $("#finishDrawingTitle").hide();
     
     let drawnImageData = canvas.toDataURL('jpg');
     var img = document.createElement("img");
@@ -202,8 +202,8 @@ $(".finishDrawing").click(function () {
     //hide canvas after submitting drawing
     canvas.isDrawingMode = false;
 
-    document.getElementById("finishDrawing").textContent = "Submitted drawing!";
-    document.getElementById("finishDrawing").disabled = true;
+    document.getElementById("finishDrawingButton").textContent = "Submitted drawing!";
+    document.getElementById("finishDrawingButton").disabled = true;
 });
 
 ////////////////////////////////////////////// end of game reveal controls/////////////////////////////////////////////

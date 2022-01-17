@@ -3,7 +3,7 @@ https://grid.layoutit.com/
 https://csslayout.io/
 */
 html{
-    /*background-image: url("ditto.png");*/
+    /*background-image: url("res/ditto.png");*/
     background-repeat: repeat;
 }
 
@@ -22,27 +22,16 @@ body{
     padding-top:20vh;
 }*/
 
-.container{
+/* .container{
     position: relative;
     width: 100%;
     height: 70vh;
-}
+} */
 
-.header{
-    border-bottom: 2px #32a89d;
-}
-
-.newRoom,.joinRoom{
+.newRoom, .joinRoom{
     margin: 4vh 1vw;
 }
-/*
-.controls,.players{
-    margin: 3vh 2vw;
-}
 
-.controls button{
-    margin: auto 4vw;
-}*/
 #eraseMode {
     background-image: url('res/eraser-inactive.png');
     background-color: transparent;
