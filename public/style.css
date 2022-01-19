@@ -1,7 +1,41 @@
-/*TODO https://layout.bradwoods.io/customize 
-https://grid.layoutit.com/
-https://csslayout.io/
-*/
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+.players
+, .controls
+, .hostControls
+, .playerControls
+, #history
+, #message
+, #record
+, #describePokemonForm
+, #choosePokemonForm
+, #guessPokemonForm
+, #revealPokemonButton
+, #finishedDescribingButton
+, .finishDrawing
+, #finishDrawing
+, #artGallery 
+, #drawingControls 
+{
+    display: none;
+}
+/* /////////////////////////////////////// main body /////////////////////////////////////////////// */
+.main-content {
+    /* Center the content */
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Border */
+    border: 4px dashed rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
 .container{
     position:absolute;
 }
@@ -16,12 +50,140 @@ https://csslayout.io/
         "body sidebar" 1fr
         / 80% 1fr;
     gap: 20px;
+    font-family: 'Gaegu';
+    font-size:20px;
+}
+/* /////////////////////////////////////// lobby /////////////////////////////////////////////// */
+.lobbyScreen {
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding-left:15vh;
+    padding-right:15vh;
+}
+.lobbyScreen h1{
+    line-height: 0.6!important;
+    float: left;
+    text-align: justify;
+    padding-right:15px;
+}
+.lobbyScreen button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.3s;
+    height:0;
+    line-height: 0;
+}
+.lobbyScreen button span:after {
+    content: '\ffeb';
+    position: absolute;
+    font-size:30px;
+    font-weight:bold;
+    opacity: 0;
+    top: 0;
+    right: 20px;
+    transition: 0.3s;
+}
+.lobbyScreen button:hover span {
+    padding-right: 18px;
+}
+.lobbyScreen button:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+.lobbyScreen button {
+    border: none!important;
+    padding-left: 10px!important;
+    padding-top:5px!important;
+    padding-bottom:5px!important;
+    font-family: 'Gaegu', cursive!important;;
+    font-weight: 400!important;
+    background-color: darkcyan!important;
+    font-size:17px;
+	cursor: pointer;
+	outline: none;
+    transition: all 0.3s;
+}
+.lobbyScreen button:hover{
+    background-color: rgb(0, 48, 41)!important;
+    transition: 0.5s;
+}
+.joinRoom, .newRoom{
+    justify-content:space-between;
+    position: absolute;
+    display:flex;
+    padding-top:15px;
+    padding-bottom:15px;
+    padding-left:15px;
+    padding-right:15px;
+    position:relative;
+    z-index:1;
+}
+.newRoom:after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scaleY(0);
+    transform-origin: bottom center;
+    background: rgb(230, 235, 221);
+    z-index: -1;
+    transition: transform 0.3s;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.joinRoom:after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scaleY(0);
+    transform-origin: top center;
+    background: rgb(230, 235, 221);
+    z-index: -1;
+    transition: transform 0.3s;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.newRoom:hover::after {
+    transform: scaleY(1);
+}
+.joinRoom:hover::after {
+    transform: scaleY(1);
+}
+.newRoom{
+    padding-top:20px;
+}
+.joinRoom{
+    padding-top:20px;
+    border-top: solid 5px rgb(230, 235, 221);
+}
+.newRoom:hover, .joinRoom:hover{
+    transition: 0.1s;
+    color:darkcyan;
+    background-position: left;
+}
+.textbox {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #bdbdbd;
+	outline:0;
+	height:35px;
+	width: 200px;
+    padding-left:10px;
+}
+.textbox:hover, .textbox:focus{
+    transition:border 0.2s ease-in-out;
+    border: 1px solid #608a81;
 }
 
-/* .newRoom, .joinRoom{
-    margin: 4vh 1vw;
-} */
-
+/* /////////////////////////////////////// drawing stuff /////////////////////////////////////////////// */
 #eraseMode {
     background-image: url('res/eraser-inactive.png');
     background-color: transparent;
@@ -70,61 +232,7 @@ https://csslayout.io/
 	animation-timing-function: ease-in;
 	animation-duration: 0.5s;
     border-bottom: 1px solid lightgray;
-    padding-bottom: 10px;
 }
-
-@keyframes fadeInOpacity {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-
-button {
-	border: none;
-    padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
-}
-  .players
-, .controls
-, .hostControls
-, .playerControls
-, #history
-, #message
-, #record
-, #describePokemonForm
-, #choosePokemonForm
-, #guessPokemonForm
-, #revealPokemonButton
-, #finishedDescribingButton
-, .finishDrawing
-, #finishDrawing
-, #artGallery 
-, #drawingControls 
-{
-    display: none;
-}
-
-/* ///////////////////////////////////////// css layout dealeos */
-
-:root {
-    --three-dimensions-card-left-side-width: 1rem;
-}
-.main-content {
-    /* Center the content */
-    align-items: center;
-    display: flex;
-    justify-content: center;
-
-    /* Border */
-    border: 4px dashed rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-}
-
 
 .drawingTools {
     display: flex;
