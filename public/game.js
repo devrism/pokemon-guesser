@@ -294,7 +294,8 @@ socket.on("endTheGame", (data) => {
         guessString += playerGuess + "<br>"
     });
 
-    $("#message").html("The answer was: " + chosenPokemon).show();
+    $("#message").html("The answer was: " + chosenPokemon + "<br>" + guessString).show();
+    
     document.getElementById("describeButton").disabled = true;
     document.getElementById("describepokemon").disabled = true;
     document.getElementById("finishedDescribingButton").disabled = true;
