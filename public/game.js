@@ -17,8 +17,7 @@ $(".createBtn").click(function () {
 
 //New Game Created Listener
 socket.on("newGame", (data) => {
-    $(".newRoom").hide();
-    $(".joinRoom").hide();
+    $(".lobbyScreen").hide();
     $("#message").html("Waiting for players to join; room code is " + data.roomID).show();
     roomID = data.roomID;
     isHost = true;
@@ -58,8 +57,7 @@ socket.on("changeMessageDisplay", (data) => {
 /*This transition() function takes care of all the UI changes to enter the game.
 */
 const transition = () => {
-    $(".newRoom").hide();
-    $(".joinRoom").hide();
+    $(".lobbyScreen").hide();
     $(".players").show();
     $("#message").show();
     $("#artGallery").show();
@@ -229,23 +227,32 @@ $("#revealDrawingButton").click(function () { //TODO
     });
 });
 
-socket.on("endOfGame", (data) => {
-    let drawnImageData = data.image;
-    let img = document.createElement("img");
+socket.on("endTheGame", (data) => {
+    let drawnImageData = data.images;
     let guesses = data.guesses;
     let chosenPokemon = data.chosenPokemon;
     let guessString = "";
-
-    img.src = drawnImageData;
-
-    //display image in html
     var block = document.getElementById("artGallery");
-    block.appendChild(img);
+
+    Object.keys(drawnImageData)
+        .forEach(function eachArtist(artist) {
+            let img = document.createElement("img");
+            let name = artist;
+            img.src = drawnImageData[artist];
+
+            //display image in html
+            let credit = document.createTextNode("Drawn by " + name + ":");
+            let br = document.createElement("br")
+            block.appendChild(credit);
+            block.appendChild(img);
+            block.appendChild(br);
+    });
 
     //display guesses
     guesses.forEach(playerGuess => {
         guessString += playerGuess + "<br>"
     });
+
     $("#message").html("The answer was: " + chosenPokemon + "<br>" + guessString).show();
     document.getElementById("revealPokemonButton").textContent = "Game has ended";
     document.getElementById("revealPokemonButton").disabled = true;

@@ -47,24 +47,25 @@
                         <button class="choosePokemonButton btn btn-primary" id="choosePokemonButton">Submit</button>
                     </form>
 
+                    
                     <form id="describePokemonForm" onsubmit="return false">
-                        Describe your Pokemon<br>                    
-                        <textarea id="describepokemon" rows="5" cols="30"></textarea>
-                        <button id="describeButton" class="describeButton btn btn-primary">Submit</button>
-                        <button id="finishedDescribingButton" class="finishedDescribingButton btn btn-primary">I'm done writing everything!</button>
+                        Describe your Pokemon
+
+                        <div id="describeContent">
+                            <div>         
+                                <textarea id="describepokemon" rows="5" cols="30"></textarea>
+                            </div>
+                            <div id="controls">
+                                <button id="describeButton" class="describeButton btn btn-primary">Submit</button>
+                                <button id="finishedDescribingButton" class="finishedDescribingButton btn btn btn-success">I'm done writing everything!</button>
+                            </div>
+                        </div>
                     </form>
 
-                    <div id="gameResultsControls">
-                        <button id="revealPokemonButton" class="revealPokemonButton btn btn-primary">
-                            Reveal Pokemon to all players
-                        </button>
-
-                        <button id="revealDrawingButton" class="revealDrawingButton btn btn-primary">
-                            Show results
-                        </button>
-                        <button id="showNextDrawingButton" class="showNextDrawingButton btn btn-primary">
-                            Show next result
-                        </button>
+                    <div id="gameResultsControls" class="btn-group" role="group" aria-label="Game result controls">
+                        <button id="revealPokemonButton" class="revealPokemonButton btn btn-warning">Reveal Pokemon to all players</button>
+                        <button id="revealDrawingButton" class="revealDrawingButton btn btn-primary">Show results</button>
+                        <button id="showNextDrawingButton" class="showNextDrawingButton btn btn-primary">Show next result</button>
                         <div id="gameResults"></div>
                     </div>
                 </div>
@@ -83,7 +84,7 @@
 
                     <div class="finishDrawing">
                         <h3 id="finishDrawingTitle">Click the Done button when you're done drawing!</h3>
-                        <button class="finishDrawingButton" id="finishDrawingButton">
+                        <button class="finishDrawingButton btn btn-primary" id="finishDrawingButton">
                             Done
                         </button>
                     </div>
@@ -91,7 +92,7 @@
                     <form id="guessPokemonForm" onsubmit="return false">
                         Who's That Pokemon?<br>                    
                         <input id="guessPokemon" name="guessPokemon" type="text" placeholder="Name of Pokemon">
-                        <button id="guessButton">Submit Guess</button>
+                        <button id="guessButton" class="btn btn-primary">Submit Guess</button>
                     </form>
 
                 </div><br>

@@ -149,7 +149,7 @@ io.on("connection", (socket) => {
     socket.on("finishDrawing", (data) => {
         //put all drawings into list to display later
         roomID = data.roomID;
-        artist = data.name;
+        let artist = data.name;
         drawnImageList[roomID][artist] = data.drawing;
         //console.log("image list: " + JSON.stringify(drawnImageList));
         // console.dir(drawnImageList[roomID]);
@@ -184,8 +184,8 @@ function endOfGame(roomID) {
 
 //signals end of game
 function endTheGame(roomID) {
-    io.sockets.to(roomID).emit("endOfGame", { 
-        image: drawnImageList[roomID][artist],
+    io.sockets.to(roomID).emit("endTheGame", { 
+        images: drawnImageList[roomID],
         guesses: roomList[roomID]['guesses'],
         chosenPokemon: roomList[roomID]['pokemon']
     });

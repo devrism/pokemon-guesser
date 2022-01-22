@@ -30,6 +30,7 @@
     /* Center the content */
     display:flex;
     flex-direction: column;
+    gap: 20px;
     align-items: center;
     justify-content: center;
     /* Border */
@@ -242,5 +243,20 @@
   }
 
 #drawingControls {
+    justify-content: center;
+}
+/* /////////////////////////////////////// host controls /////////////////////////////////////////////// */
+
+#describeContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+#describeContent #controls {
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+    align-items: center;
     justify-content: center;
 }
