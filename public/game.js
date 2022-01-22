@@ -11,8 +11,12 @@ let submittedDrawing = false;
 
 /*Create Game Event Emitter*/
 $(".createBtn").click(function () {
-    playerName = $("input[name=hostName").val();
-    socket.emit('createGame', { name: playerName.replace(/\W/g, '') });
+    playerName = $("input[name=hostName").val().replace(/\W/g, '');
+    if (playerName) {
+        socket.emit('createGame', { name: playerName });
+    } else {
+        $("#message").html("You cannot have a blank name!").show();
+    }
 })
 
 //New Game Created Listener
@@ -25,13 +29,19 @@ socket.on("newGame", (data) => {
 
 //Join Game Event Emitter
 $(".joinBtn").click(function () {
-    playerName = $("input[name=playerName]").val();
-    roomID = $("input[name=roomID").val();
-    socket.emit('joinGame', {
-        name: playerName.replace(/\W/g, ''),
-        roomID: roomID
-    });
     isHost = false;
+    playerName = $("input[name=playerName]").val().replace(/\W/g, '');
+
+    if (playerName) {
+        roomID = $("input[name=roomID").val();
+        socket.emit('joinGame', {
+            name: playerName,
+            roomID: roomID
+        });
+    } else {
+        $("#message").html("You cannot have a blank name!").show();
+    }
+    
 })
 socket.on("joinGameSuccess", (data) => {
     let playerList = data.currentPlayers;
@@ -51,7 +61,11 @@ socket.on("joinGameSuccess", (data) => {
 })
 
 socket.on("changeMessageDisplay", (data) => {
-    $("#message").html(data.message).show();
+    if(data.mode == "append") {
+        $("#message").append(data.message).show();
+    } else {
+        $("#message").html(data.message).show();
+    }
 })
 
 /*This transition() function takes care of all the UI changes to enter the game.
@@ -61,7 +75,7 @@ const transition = () => {
     $(".players").show();
     $("#message").show();
     $("#artGallery").show();
-
+    
     if (isHost) {
         $(".hostControls").show();
     } else {
@@ -69,6 +83,7 @@ const transition = () => {
     }
     $("#describePokemonForm").hide();
 }
+///////////////////////////////////////////////////////////////////////////////////////////// Host controls ////////////
 
 //Host chooses pokemon to describe
 $(".choosePokemonButton").click(function () {
@@ -110,8 +125,29 @@ $(".describeButton").click(function () {
     document.getElementById("describepokemon").value = ""; //clear textarea after hitting Submit
     document.getElementById("describeButton").textContent = "Submit another description";
     $("#revealPokemonButton").show();
+    $("#revealDrawingButton").show();
     $("#finishedDescribingButton").show();
 })
+$(".finishedDescribingButton").click(function () {
+    document.getElementById("describeButton").disabled = true;
+    document.getElementById("describepokemon").disabled = true;
+    document.getElementById("finishedDescribingButton").disabled = true;
+
+    socket.emit('finishedDescribing', {
+        roomID: roomID
+    });
+})
+socket.on("finishedDescribing", () => {
+    $("#message").html("The host is done writing all the descriptions!").show();
+
+    var block = document.getElementById("descriptionHistory");
+    var text = document.createTextNode("Host is done describing! Time to finish up your drawing and submit!");
+    block.appendChild(text);
+    setTimeout(()=> text.classList.add("animate"), 500);
+    var descriptionHistory = document.getElementById("record");
+    descriptionHistory.scrollTop = descriptionHistory.scrollHeight;
+})
+
 // Update description event listener
 socket.on("updateDescription", (data) => {
     $("#message").hide();
@@ -219,9 +255,14 @@ $("#revealPokemonButton").click(function () {
 socket.on("revealPokemonToPlayers", (data) => {
     let chosenPokemon = data.chosenPokemon;
     $("#message").html("The answer was: " + chosenPokemon).show();
+
+    document.getElementById("guessButton").textContent = "The answer was already revealed!";
+    document.getElementById("guessButton").disabled = true;
+    document.getElementById("revealPokemonButton").textContent = "Answer has been revealed!";
+    document.getElementById("revealPokemonButton").disabled = true;
 });
 
-$("#revealDrawingButton").click(function () { //TODO
+$("#revealDrawingButton").click(function () {
     socket.emit('revealDrawings', {
         roomID: roomID,
     });
@@ -253,13 +294,12 @@ socket.on("endTheGame", (data) => {
         guessString += playerGuess + "<br>"
     });
 
-    $("#message").html("The answer was: " + chosenPokemon + "<br>" + guessString).show();
-    document.getElementById("revealPokemonButton").textContent = "Game has ended";
-    document.getElementById("revealPokemonButton").disabled = true;
+    $("#message").html("The answer was: " + chosenPokemon).show();
     document.getElementById("describeButton").disabled = true;
     document.getElementById("describepokemon").disabled = true;
     document.getElementById("finishedDescribingButton").disabled = true;
     document.getElementById("revealDrawingButton").disabled = true;
+    document.getElementById("finishDrawingButton").disabled = true;
 })
 
 //TODO comment out when done developing
@@ -303,5 +343,3 @@ pickr.on("change", function (e) {
     brushColor = e.toHEXA().toString();
     canvas.freeDrawingBrush.color = brushColor;
 });
-
-//TODO gameResultsControls stuff

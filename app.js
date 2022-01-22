@@ -109,6 +109,10 @@ io.on("connection", (socket) => {
             name: name
         }); 
     })
+    socket.on("finishedDescribing", (data) => {
+        let roomID = data.roomID;
+        io.sockets.to(roomID).emit("finishedDescribing", {}); 
+    })
     // prevent more players from joining if the game has started
     socket.on("startGame", (data) => {
         let roomID = data.roomID;
@@ -125,7 +129,7 @@ io.on("connection", (socket) => {
 
     ////////////////////////////////////////////// Player controls ////////////////////////////////////////////
     socket.on("submitGuess", (data) => {
-        let guess = data.guess.replace(/\W/g, '');
+        let guess = data.guess.replace(/[&<"]/g, '');
         let roomID = data.roomID;
         roomList[roomID]['guesses'].push(data.name + " guessed: " + guess);
         console.log(roomList[roomID]['guesses']);
@@ -161,6 +165,10 @@ io.on("connection", (socket) => {
         if(endOfGame(roomID)) {
             endTheGame(roomID);
         }
+    })
+
+    socket.on("revealDrawings", (data) => {
+        endTheGame(data.roomID);
     })
 
     ////////////////////////////////////////////// Helper Functions  ////////////////////////////////////////////

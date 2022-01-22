@@ -18,6 +18,7 @@
 , #guessPokemonForm
 , #revealPokemonButton
 , #finishedDescribingButton
+, #revealDrawingButton
 , .finishDrawing
 , #finishDrawing
 , #artGallery 
@@ -26,6 +27,9 @@
     display: none;
 }
 /* /////////////////////////////////////// main body /////////////////////////////////////////////// */
+.players {
+    font-size: 18px;
+}
 .main-content {
     /* Center the content */
     display:flex;
@@ -36,6 +40,8 @@
     /* Border */
     border: 4px dashed rgba(0, 0, 0, 0.3);
     border-radius: 4px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 .container{
     position:absolute;
@@ -185,6 +191,10 @@
 }
 
 /* /////////////////////////////////////// drawing stuff /////////////////////////////////////////////// */
+.drawingButton {
+    border: none;
+    margin-left: 20px;
+}
 #eraseMode {
     background-image: url('res/eraser-inactive.png');
     background-color: transparent;
@@ -238,12 +248,21 @@
 .drawingTools {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 10px;
     float:right;
+    margin-left: 20px;
+    width:130px;
   }
 
 #drawingControls {
     justify-content: center;
+}
+
+#brushSize {
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 18px;
+    height: 100px;
+    padding: 0 5px;
 }
 /* /////////////////////////////////////// host controls /////////////////////////////////////////////// */
 

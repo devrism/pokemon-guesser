@@ -17,7 +17,7 @@
         <div class="body">
             <div class="main-content">
                 <div class="players">
-                    <h3 id="playerListTitle">Player List:</h3>
+                    <h4 id="playerListTitle">Player List:</h4>
                     <div id="playerList"></div>
                 </div>
                 <div class="lobbyScreen">
@@ -38,7 +38,6 @@
                     </div>
                 </div>
                 <div class="hostControls">
-                    You are the host!
                     <button class="startGame btn btn-primary" id="startGame">All players are in (begin game)!</button>
 
                     <form id="choosePokemonForm" onsubmit="return false">       
@@ -64,8 +63,7 @@
 
                     <div id="gameResultsControls" class="btn-group" role="group" aria-label="Game result controls">
                         <button id="revealPokemonButton" class="revealPokemonButton btn btn-warning">Reveal Pokemon to all players</button>
-                        <button id="revealDrawingButton" class="revealDrawingButton btn btn-primary">Show results</button>
-                        <button id="showNextDrawingButton" class="showNextDrawingButton btn btn-primary">Show next result</button>
+                        <button id="revealDrawingButton" class="revealDrawingButton btn btn-primary">Show results (end game)</button>
                         <div id="gameResults"></div>
                     </div>
                 </div>
@@ -73,10 +71,10 @@
                     <div id="drawingControls">
                         <canvas id="canvas" width="800" height="500"></canvas>
                         <div class="drawingTools">
-                            <button id="eraseMode"><label class='buttonLabel'>Erase</label></button>
-                            <button id="drawMode"><label class='buttonLabel'>Draw</label></button>
+                            <button id="eraseMode" class="drawingButton"></button>
+                            <button id="drawMode" class="drawingButton"></button>
                             <div id="brushSizeDisplay">Brush Size:</div>
-                            <label><input type="range" id="brushSize" name="brushSize" min="1" max="100" step="1" value="5"></label>
+                            <label><input type="range" id="brushSize" name="brushSize" min="1" max="100" step="1" value="5" orient="vertical"></label>
                             <div id="colorPickerLabel">Color Picker</div>
                             <div id="colorPicker"></div>
                         </div>
